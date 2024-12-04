@@ -1,0 +1,15 @@
+<Parameters xmlns="http://hl7.org/fhir">
+   <id value="CreatePseudonymest" />
+   <parameter>
+       <name value="target" />
+       <valueString value="proj01" />
+   </parameter>
+   <parameter>
+       <name value="original1" />
+       <valueString value="1001000000022" />
+   </parameter>
+   <parameter>
+       <name value="original2" />
+       <valueString value="1001000000033" />
+   </parameter>
+</Parameters>

@@ -1,0 +1,11 @@
+<query>
+    SELECT
+        e/ehr_id/value AS EHRID,
+        e/ehr_status/subject/external_ref/id/value AS SubjectID
+        FROM EHR e
+        CONTAINS VERSION v
+        CONTAINS COMPOSITION c[openEHR-EHR-COMPOSITION.report.v1]
+        CONTAINS EVALUATION x[openEHR-EHR-EVALUATION.problem_diagnosis.v1] 
+        WHERE c/name/value='Diagnose' AND v/commit_audit/time_committed/value >= '{{last_run_time}}'
+    LIMIT 3
+</query>

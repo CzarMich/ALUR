@@ -1,0 +1,37 @@
+# Configuration file to manage resources, file paths, authentication, and pseudonymization settings
+
+resources:
+  - name: Condition
+    file: condition.xml
+  # Uncomment and add more resources as needed
+  # - name: Procedure
+  #   file: procedure.xml
+
+paths:
+  # Define file paths
+  env_file: .env
+  state_file: ../application/state.json
+  temp_folder: ../application/temp
+  db_file: ../application/Aql2FHIR.db
+  aql_folder: ../openehr_aql
+  log_folder: ../application/logs
+
+authentication:
+  # Authentication method options: basic, bearer, api_key
+  method: basic
+
+pseudonymization:
+  enabled: false  # Global switch to enable or disable pseudonymization
+  elements_to_pseudonymize:
+    patient_id: true
+    encounter_id: false
+    patient_dob: false
+
+# Example override paths for using absolute paths
+# resources:
+# paths:
+#   state_file: /opt/AQL2FHIR/state/state.json
+#   temp_folder: /opt/application/temp
+#   db_file: /opt/AQL2FHIR/application/temp/db/Aql2FHIR.db
+#   aql_folder: /opt/AQL2FHIR/application/openehr_aql
+#   log_folder: /opt/AQL2FHIR/application/logs

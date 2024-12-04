@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mapping Interface</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #ccc;
+        }
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+        .tab-content {
+            display: none;
+            padding: 20px;
+        }
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <h1>Mapping Interface</h1>
+    <div class="tabs">
+        <div class="tab" data-tab="upload-sample">Upload AQL Sample</div>
+        <div class="tab" data-tab="choose-fhir-profile">Choose FHIR Profile</div>
+        <div class="tab" data-tab="map-fields">Map Fields</div>
+        <div class="tab" data-tab="view-mappings">View Mappings</div>
+    </div>
+
+    <div id="upload-sample" class="tab-content">
+        <h2>Upload AQL Sample</h2>
+        <form id="uploadSampleForm" method="post" enctype="multipart/form-data" action="/upload-sample">
+            <label for="templateName">Template Name:</label>
+            <input type="text" id="templateName" name="templateName" required>
+            <label for="sampleFile">Sample File:</label>
+            <input type="file" id="sampleFile" name="sampleFile" accept=".json" required>
+            <button type="submit">Upload</button>
+        </form>
+        <div id="uploadSampleResult"></div>
+    </div>
+
+    <div id="choose-fhir-profile" class="tab-content">
+        <h2>Choose FHIR Profile</h2>
+        <form id="chooseFhirProfileForm" method="post" action="/load-fields">
+            <label for="aqlQuery">AQL Query:</label>
+            <textarea id="aqlQuery" name="aqlQuery" rows="4" required></textarea>
+            <label for="fhirProfile">FHIR Profile:</label>
+            <select id="fhirProfile" name="fhirProfile" required>
+                <!-- Options will be dynamically populated -->
+            </select>
+            <button type="submit">Load Fields</button>
+        </form>
+        <div id="fhirFieldsResult"></div>
+    </div>
+
+    <div id="map-fields" class="tab-content">
+        <h2>Map Fields</h2>
+        <form id="mapFieldsForm" method="post" action="/store-mappings">
+            <label for="templateNameMapping">Template Name:</label>
+            <input type="text" id="templateNameMapping" name="templateName" required>
+            <div id="mappingContainer">
+                <!-- Dynamic mapping fields will be added here -->
+            </div>
+            <button type="submit">Store Mappings</button>
+        </form>
+        <div id="mapFieldsResult"></div>
+    </div>
+
+    <div id="view-mappings" class="tab-content">
+        <h2>View Mappings</h2>
+        <form id="viewMappingsForm">
+            <label for="templateNameView">Template Name:</label>
+            <input type="text" id="templateNameView" name="templateName" required>
+            <button type="button" onclick="viewMappings()">View</button>
+        </form>
+        <div id="viewMappingsResult"></div>
+    </div>
+
+    <script>
+        // Tab navigation
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                document.querySelector(`#${tab.dataset.tab}`).classList.add('active');
+            });
+        });
+
+        // Handle form submissions
+        document.getElementById('uploadSampleForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+            fetch('/upload-sample', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('uploadSampleResult').innerText = JSON.stringify(data);
+            });
+        });
+
+        document.getElementById('chooseFhirProfileForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+            fetch('/load-fields', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    aqlQuery: formData.get('aqlQuery'),
+                    fhirProfile: formData.get('fhirProfile')
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('fhirFieldsResult').innerText = JSON.stringify(data);
+                populateMappingFields(data.openEhrFields, data.fhirFields);
+            });
+        });
+
+        document.getElementById('mapFieldsForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+            const fieldMappings = {};
+            document.querySelectorAll('#mappingContainer .mapping').forEach(mapping => {
+                const openEhrField = mapping.querySelector('.openEhrField').value;
+                const fhirField = mapping.querySelector('.fhirField').value;
+                fieldMappings[openEhrField] = fhirField;
+            });
+
+            fetch('/store-mappings', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    templateName: formData.get('templateName'),
+                    fieldMappings: fieldMappings
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('mapFieldsResult').innerText = JSON.stringify(data);
+            });
+        });
+
+        // Populate FHIR profile options
+        fetch('/fhir_profiles')
+        .then(response => response.json())
+        .then(data => {
+            const fhirProfileSelect = document.getElementById('fhirProfile');
+            data.profiles.forEach(profile => {
+                const option = document.createElement('option');
+                option.value = profile;
+                option.textContent = profile;
+                fhirProfileSelect.appendChild(option);
+            });
+        });
+
+        // Populate mapping fields
+        function populateMappingFields(openEhrFields, fhirFields) {
+            const mappingContainer = document.getElementById('mappingContainer');
+            mappingContainer.innerHTML = '';
+            openEhrFields.forEach(openEhrField => {
+                const div = document.createElement('div');
+                div.classList.add('mapping');
+                const label = document.createElement('label');
+                label.textContent = openEhrField;
+                const select = document.createElement('select');
+                select.classList.add('fhirField');
+                fhirFields.forEach(fhirField => {
+                    const option = document.createElement('option');
+                    option.value = fhirField;
+                    option.textContent = fhirField;
+                    select.appendChild(option);
+                });
+                div.appendChild(label);
+                div.appendChild(select);
+                mappingContainer.appendChild(div);
+            });
+        }
+
+        // View mappings
+        function viewMappings() {
+            const templateName = document.getElementById('templateNameView').value;
+            fetch(`/view-mappings?templateName=${templateName}`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('viewMappingsResult').innerText = JSON.stringify(data);
+            });
+        }
+    </script>
+</body>
+</html>

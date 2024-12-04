@@ -1,0 +1,22 @@
+Flask
+requests
+python-dotenv
+
+
+Directory Order:
+
+Home
+---- main.py
+---- requirements.txt
+---- README.md
+---conf
+   ----__init__.py
+   ---- config.py
+   --- utils.py
+ certs
+
+application
+ logs
+ database
+ temp
+
