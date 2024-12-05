@@ -1,0 +1,39 @@
+<query>
+SELECT DISTINCT c/content[openEHR-EHR-OBSERVATION.laboratory_test_result.v1]/protocol[at0004]/items[at0094]/items[at0063,'Identifikation der Laboranforderung']/value/id AS LabOrderNumber,
+c/uid/value as CompositionID, 
+e/ehr_id/value AS EHRID,
+e/ehr_status/subject/external_ref/id/value as SubjectID,
+c/context/other_context[at0001,'Tree']/items[at0002,'Bericht ID']/value/value AS BerichtID,
+c/context/other_context[at0001,'Tree']/items[at0005, 'Status']/value/value AS ReportStatus,
+c/context/other_context[at0001,'Tree']/items[openEHR-EHR-CLUSTER.case_identification.v0]/items[at0001]/value/value AS FallKennung,
+c/content[openEHR-EHR-OBSERVATION.laboratory_test_result.v1]/protocol[at0004]/items[at0094]/items[at0063,'Identifikation der Laboranforderung']/value/id AS Observation_PlacerNumber,
+c/content[openEHR-EHR-OBSERVATION.laboratory_test_result.v1,'Laborbefund']/data[at0001]/events[at0002]/data[at0003]/items[at0005,'Labortest-Kategorie']/value/value as Labortest_Kategorie,
+c/content[openEHR-EHR-OBSERVATION.laboratory_test_result.v1,'Laborbefund']/data[at0001]/events[at0002]/data[at0003]/items[at0005,'Labortest-Kategorie']/value/defining_code/code_string as Labortest_KategorieCode,
+c/content[openEHR-EHR-OBSERVATION.laboratory_test_result.v1,'Laborbefund']/data[at0001]/events[at0002]/data[at0003]/items[at0005,'Labortest-Kategorie']/value/defining_code/terminology_id/value as Labortest_KategorieTerminologyID,
+c/content[openEHR-EHR-OBSERVATION.laboratory_test_result.v1,'Laborbefund']/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.specimen.v1,'Probenmaterial']/items[at0034]/value/value AS Zeitpunkt_des_probeneingangs,
+c/content[openEHR-EHR-OBSERVATION.laboratory_test_result.v1,'Laborbefund']/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.specimen.v1,'Probenmaterial']/items[at0001]/value/id as Specimen,
+c/content[openEHR-EHR-OBSERVATION.laboratory_test_result.v1,'Laborbefund']/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.laboratory_test_analyte.v1,'Pro Laboranalyt']/items[at0024]/name/mappings/target/code_string AS UKSH_LocalCode,
+c/content[openEHR-EHR-OBSERVATION.laboratory_test_result.v1,'Laborbefund']/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.laboratory_test_analyte.v1,'Pro Laboranalyt']/items[at0024]/name/mappings/target/terminology_id/value AS UKSH_LocalCodeSystem,
+c/content[openEHR-EHR-OBSERVATION.laboratory_test_result.v1,'Laborbefund']/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.laboratory_test_analyte.v1,'Pro Laboranalyt']/items[at0024]/value/value AS Bezeichnung_des_Analyts,
+c/content[openEHR-EHR-OBSERVATION.laboratory_test_result.v1,'Laborbefund']/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.laboratory_test_analyte.v1,'Pro Laboranalyt']/items[at0024]/value/defining_code/code_string AS Bezeichnung_des_Analyt_LOINC_Code,
+c/content[openEHR-EHR-OBSERVATION.laboratory_test_result.v1,'Laborbefund']/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.laboratory_test_analyte.v1,'Pro Laboranalyt']/items[at0001,'Messwert']/value/magnitude AS Messwert,
+c/content[openEHR-EHR-OBSERVATION.laboratory_test_result.v1,'Laborbefund']/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.laboratory_test_analyte.v1,'Pro Laboranalyt']/items[at0001,'Messwert']/value/units AS MesswertUnit,
+c/content[openEHR-EHR-OBSERVATION.laboratory_test_result.v1,'Laborbefund']/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.laboratory_test_analyte.v1,'Pro Laboranalyt']/items[at0001,'Messwert']/value/normal_range/lower/magnitude AS MesswertLowerRange,
+c/content[openEHR-EHR-OBSERVATION.laboratory_test_result.v1,'Laborbefund']/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.laboratory_test_analyte.v1,'Pro Laboranalyt']/items[at0001,'Messwert']/value/normal_range/upper/magnitude AS MesswertUpperRange,
+c/content[openEHR-EHR-OBSERVATION.laboratory_test_result.v1,'Laborbefund']/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.laboratory_test_analyte.v1,'Pro Laboranalyt']/items[at0001,'Messwert']/value/value AS TextResult,
+c/content[openEHR-EHR-OBSERVATION.laboratory_test_result.v1,'Laborbefund']/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.laboratory_test_analyte.v1,'Pro Laboranalyt']/items[at0005]/value/value. as ResultStatus,
+c/content[openEHR-EHR-OBSERVATION.laboratory_test_result.v1,'Laborbefund']/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.laboratory_test_analyte.v1,'Pro Laboranalyt']/items[at0004,'Interpretation']/value/defining_code/code_string as Interpretation_code_string,
+c/content[openEHR-EHR-OBSERVATION.laboratory_test_result.v1,'Laborbefund']/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.laboratory_test_analyte.v1,'Pro Laboranalyt']/items[at0004,'Interpretation']/value/value as interpretationString,
+c/content[openEHR-EHR-OBSERVATION.laboratory_test_result.v1,'Laborbefund']/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.laboratory_test_analyte.v1,'Pro Laboranalyt']/items[at0004,'Interpretation']/value/defining_code/terminology_id/value as Interpretation_terminologyString
+FROM EHR e
+CONTAINS (COMPOSITION c[openEHR-EHR-COMPOSITION.report-result.v1] AND COMPOSITION k[openEHR-EHR-COMPOSITION.report.v1] AND VERSION v)
+WHERE c/name/value='Laborbericht' AND k/name/value='UKSH Einwilligung'
+AND (k/content[openEHR-EHR-ACTION.uksh_einwilligung.v1]/description[at0001]/items[openEHR-EHR-CLUSTER.uksh_consent.v1]/items[openEHR-EHR-CLUSTER.policy.v1]/items[at0006]/value/defining_code/code_string MATCHES {
+            '1.2.276.0.76.3.1.454.1.100.1.1.1.1', 
+            '1.2.276.0.76.3.1.454.1.100.1.1.2.1',
+            '1.2.276.0.76.3.1.454.1.100.1.1.4.1'
+        }
+    )
+    AND v/commit_audit/time_committed/value >= '{{last_run_time}}' 
+    ORDER BY v/commit_audit/time_committed/value DESC
+</query>

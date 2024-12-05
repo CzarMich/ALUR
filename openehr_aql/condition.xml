@@ -1,6 +1,7 @@
 <query>
-        SELECT c/uid/value AS Composition_ID, 
-        v/commit_audit/time_committed/value AS Time_Committed, 
+   SELECT DISTINCT c/uid/value AS Composition_ID,
+        k/content[openEHR-EHR-ACTION.uksh_einwilligung.v1]/description[at0001]/items[openEHR-EHR-CLUSTER.uksh_consent.v1]/items[openEHR-EHR-CLUSTER.policy.v1]/items[at0005]/value/value AS ConsentPolicy,
+        v/commit_audit/time_committed/value AS TIMECommitted,
         e/ehr_status/subject/external_ref/id/value AS subjectID,
         c/context/other_context[at0001]/items[openEHR-EHR-CLUSTER.case_identification.v0]/items[at0001]/value/value AS  Condition_encounter,
         c/content[openEHR-EHR-EVALUATION.problem_diagnosis.v1]/data[at0001]/items[openEHR-EHR-CLUSTER.problem_qualifier.v2]/items[at0063]/value/value AS Condition_category,
@@ -19,21 +20,19 @@
         c/content[openEHR-EHR-EVALUATION.problem_diagnosis.v1]/data[at0001]/items[at0073]/value/value as  Condition_verificationStatus,
         c/content[openEHR-EHR-EVALUATION.problem_diagnosis.v1]/data[at0001]/items[at0073]/value/defining_code/code_string as  Condition_verificationStatus_Code,
         c/content[openEHR-EHR-EVALUATION.problem_diagnosis.v1]/data[at0001]/items[at0073]/value/defining_code/terminology_id/value as  Condition_verificationStatus_System
- 
-        FROM EHR e 
-        CONTAINS (COMPOSITION c[openEHR-EHR-COMPOSITION.report.v1] AND COMPOSITION k[openEHR-EHR-COMPOSITION.report.v1])
-        CONTAINS VERSION v 
-        WHERE c/name/value='Diagnose' 
-        AND v/commit_audit/time_committed/value >= '{{last_run_time}}' 
-        AND k/name/value='UKSH Einwilligung'
-        AND (
-        k/content[openEHR-EHR-ACTION.uksh_einwilligung.v1]/description[at0001]/items[openEHR-EHR-CLUSTER.uksh_consent.v1]/items[openEHR-EHR-CLUSTER.policy.v1]/items[at0005]/value/defining_code/code_string = '1'
-        AND k/content[openEHR-EHR-ACTION.uksh_einwilligung.v1]/description[at0001]/items[openEHR-EHR-CLUSTER.uksh_consent.v1]/items[openEHR-EHR-CLUSTER.policy.v1]/items[at0006]/value/defining_code/code_string MATCHES {
+        
+    FROM EHR e
+    CONTAINS (COMPOSITION c[openEHR-EHR-COMPOSITION.report.v1] AND COMPOSITION k[openEHR-EHR-COMPOSITION.report.v1] AND VERSION v)
+    WHERE c/name/value='Diagnose' AND k/name/value='UKSH Einwilligung'
+    AND (k/content[openEHR-EHR-ACTION.uksh_einwilligung.v1]/description[at0001]/items[openEHR-EHR-CLUSTER.uksh_consent.v1]/items[openEHR-EHR-CLUSTER.policy.v1]/items[at0006]/value/defining_code/code_string MATCHES {
             '1.2.276.0.76.3.1.454.1.100.1.1.1.1', 
             '1.2.276.0.76.3.1.454.1.100.1.1.2.1',
             '1.2.276.0.76.3.1.454.1.100.1.1.4.1'
         }
     )
-        ORDER BY v/commit_audit/time_committed/value DESC
-        OFFSET 0 LIMIT 10
+    AND v/commit_audit/time_committed/value >= '{{last_run_time}}' 
+    ORDER BY v/commit_audit/time_committed/value DESC
+    OFFSET 0 LIMIT 10
 </query>
+
+    ###Limit  can be removed- This was included just for testing purposes.##
