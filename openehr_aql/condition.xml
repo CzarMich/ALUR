@@ -3,7 +3,7 @@
         k/content[openEHR-EHR-ACTION.uksh_einwilligung.v1]/description[at0001]/items[openEHR-EHR-CLUSTER.uksh_consent.v1]/items[openEHR-EHR-CLUSTER.policy.v1]/items[at0005]/value/value AS ConsentPolicy,
         v/commit_audit/time_committed/value AS TIMECommitted,
         e/ehr_status/subject/external_ref/id/value AS subjectID,
-        c/context/other_context[at0001]/items[openEHR-EHR-CLUSTER.case_identification.v0]/items[at0001]/value/value AS  Condition_encounter,
+        c/context/other_context[at0001]/items[openEHR-EHR-CLUSTER.case_identification.v0]/items[at0001]/value/value AS  encounter_id,
         c/content[openEHR-EHR-EVALUATION.problem_diagnosis.v1]/data[at0001]/items[openEHR-EHR-CLUSTER.problem_qualifier.v2]/items[at0063]/value/value AS Condition_category,
         c/content[openEHR-EHR-EVALUATION.problem_diagnosis.v1]/data[at0001]/items[openEHR-EHR-CLUSTER.problem_qualifier.v2]/items[at0063]/value/defining_code/code_string AS Condition_category_code,  
         c/content[openEHR-EHR-EVALUATION.problem_diagnosis.v1]/data[at0001]/items[at0002]/value/defining_code/code_string AS Condition_code,
@@ -34,5 +34,3 @@
     ORDER BY v/commit_audit/time_committed/value DESC
     OFFSET 0 LIMIT 10
 </query>
-
-    ###Limit  can be removed- This was included just for testing purposes.##

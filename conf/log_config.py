@@ -62,3 +62,24 @@ def setup_logging():
     # Add handlers to the logger
     logger.addHandler(console_handler)
     logger.addHandler(file_handler)
+
+
+
+
+######### Ensure log folder exists
+os.makedirs(LOG_FOLDER, exist_ok=True)
+
+# Set up logging configuration
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler(os.path.join(LOG_FOLDER, 'app.log')),
+        logging.StreamHandler()  # Optional: also log to console
+    ]
+)
+
+logger = logging.getLogger(__name__)
+
+# Example usage of logger
+logger.info('Logging setup complete.')

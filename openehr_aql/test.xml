@@ -6,6 +6,7 @@
         CONTAINS VERSION v
         CONTAINS COMPOSITION c[openEHR-EHR-COMPOSITION.report.v1]
         CONTAINS EVALUATION x[openEHR-EHR-EVALUATION.problem_diagnosis.v1] 
-        WHERE c/name/value='Diagnose' AND v/commit_audit/time_committed/value >= '{{last_run_time}}'
-    LIMIT 3
+        WHERE c/name/value='Diagnose' AND v/commit_audit/time_committed/value &lt;= '{{last_run_time}}'
+        ORDER BY v/commit_audit/time_committed/value DESC
+        OFFSET 0 LIMIT 5
 </query>

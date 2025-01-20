@@ -3,16 +3,26 @@
 resources:
   - name: Condition
     file: condition.xml
+    required_fields:
+      - Composition_ID
+      - subjectID
+    mapper_module: fhir_mapping.condition_mapper
+    mapper_function: map_condition
   # Uncomment and add more resources as needed
   # - name: Procedure
   #   file: procedure.xml
+
+fetch_by_date:
+  enabled: true
+  start_date: "2025-01-08"
+  end_date: "2025-01-09" #leave empty for open-ended
 
 paths:
   # Define file paths
   env_file: .env
   state_file: ../application/state.json
   temp_folder: ../application/temp
-  db_file: ../application/Aql2FHIR.db
+  db_file: ../application/aql2fhir.db
   aql_folder: ../openehr_aql
   log_folder: ../application/logs
 
@@ -21,11 +31,48 @@ authentication:
   method: basic
 
 pseudonymization:
-  enabled: false  # Global switch to enable or disable pseudonymization
+  enabled: true  # Global switch to enable or disable pseudonymization
   elements_to_pseudonymize:
-    patient_id: true
-    encounter_id: false
-    patient_dob: false
+    Composition_ID: 
+      enabled: true
+      prefix: "EHRID-"  # Prefix to add to the pseudonymized value
+    subjectID: 
+      enabled: true
+      prefix: "PID_"  # Prefix for encrypted Subject IDs
+    encounter_id:
+      enabled: true
+      prefix: "FALLID_"  # Prefix for encrypted Encounter IDs
+    Patient_DOB:
+      enabled: false  # No pseudonymization for DOB
+    LaboranfoderungID:
+      enabled: true
+      prefix: "LAB_"  # Prefix for encrypted Laboranfoderung IDs
+    CompositionID:
+      enabled: true
+      prefix: "COMPID_"  # Prefix for encrypted Composition IDs
+    BerichtID:
+      enabled: true
+      prefix: "BERID_"  # Prefix for encrypted Bericht IDs
+
+database:  #Database connection settings
+  name: sqlite #Database name change to sqllite for small scale testing
+  host: localhost
+  port: 5432
+  user: postgres
+  password: password
+  database: aql2fhir
+
+
+sanitize:
+  enabled: true
+  elements_to_sanitize:
+    - Composition_ID
+    - subjectID
+    - encounter_id
+    - Patient_DOB
+    - LaboranfoderungID
+    - CompositionID
+    - BerichtID
 
 # Example override paths for using absolute paths
 # resources:
@@ -35,3 +82,5 @@ pseudonymization:
 #   db_file: /opt/AQL2FHIR/application/temp/db/Aql2FHIR.db
 #   aql_folder: /opt/AQL2FHIR/application/openehr_aql
 #   log_folder: /opt/AQL2FHIR/application/logs
+
+

@@ -20,3 +20,16 @@ application
  database
  temp
 
+
+ Splitting Responsibilities
+Currently, utils.py still does a variety of things:
+
+Paths management (get_path-style functions)
+State file management (get_last_run_time, set_last_run_time)
+Session creation with requests_cache
+(Optional) environment loading
+That’s acceptable if the file isn’t too big. As the project grows, you might consider splitting out specialized areas to keep each utility file focused. For example:
+
+path_utils.py for path management
+db_utils.py for state file or SQLite interactions
+session_utils.py for session management

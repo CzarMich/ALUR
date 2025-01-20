@@ -1,0 +1,1 @@
+2025-01-15 16:35:07,518 - ERROR - Error importing central_processor: cannot import name 'main' from 'processors.central_processor' (/Users/michaelanywar/Documents/Workspace/2025Research/openehr-fhir-mapping/processors/central_processor.py)

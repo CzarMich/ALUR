@@ -1,0 +1,5 @@
+{
+    "python.analysis.extraPaths": [
+        "/Users/michaelanywar/Documents/Workspace/2025Research/openehr-fhir-mapping"
+    ]
+}

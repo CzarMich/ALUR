@@ -1,56 +1,84 @@
-import json
-from conf.utils import get_db_path  # Import the function to get the path to the database
+import logging
+from typing import Dict, Any
 
-def map_condition(row):
-    def clean_dict(d):
-        """Recursively remove keys with None or empty values from a dictionary."""
-        if isinstance(d, dict):
-            cleaned = {k: clean_dict(v) for k, v in d.items() if v not in [None, '', [], {}]}
-            return {k: v for k, v in cleaned.items() if v not in [None, '', [], {}]}
-        elif isinstance(d, list):
-            return [clean_dict(item) for item in d if item not in [None, '', [], {}]]
-        else:
-            return d
+# Set up logging
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
-    def clean_code_section(resource):
-        """Remove the entire 'code' field if it or its children are empty or if extensions lack 'code'."""
-        code = resource.get('code')
-        if isinstance(code, dict) and 'coding' in code:
-            coding = code['coding']
-            cleaned_coding = []
-            for item in coding:
-                if isinstance(item, dict):
-                    extensions = item.get('extension', [])
-                    # Clean each extension, removing those where 'valueCoding' or 'code' is None
-                    cleaned_extensions = []
-                    for ext in extensions:
-                        value_coding = ext.get('valueCoding', {})
-                        # Only keep extensions where 'valueCoding' and 'code' are not empty
-                        if value_coding.get('code'):
-                            cleaned_extensions.append({**ext, 'valueCoding': clean_dict(value_coding)})
-                    # Only add coding items that have valid extensions
-                    if cleaned_extensions:
-                        cleaned_coding.append({**item, 'extension': cleaned_extensions})
-            # Remove the 'code' section if no valid coding entries remain
-            if not cleaned_coding:
-                resource.pop('code', None)
-            else:
-                resource['code']['coding'] = cleaned_coding
+def clean_section_with_items(
+    resource: dict,
+    section_key: str,
+    items_key: str,
+    top_fields_required: list = None,
+    extension_required_code: bool = False
+) -> None:
+    """
+    Clean a section of a resource that contains a list of items, such as 'coding' in 'code' or 'severity'.
+    """
+    section_block = resource.get(section_key)
+    if not isinstance(section_block, dict):
+        return
 
-    def clean_severity_section(resource):
-        """Remove the entire 'severity' field if it or its children are empty."""
-        severity = resource.get('severity')
-        if isinstance(severity, dict) and 'coding' in severity:
-            coding = severity['coding']
-            cleaned_coding = [item for item in coding if item not in [None, '', {}, []]]
-            if cleaned_coding:
-                resource['severity']['coding'] = cleaned_coding
-            else:
-                resource.pop('severity', None)
+    items_list = section_block.get(items_key)
+    if not isinstance(items_list, list):
+        return
 
-    # Build the dictionary structure
+    cleaned_items = []
+
+    for item in items_list:
+        if not isinstance(item, dict):
+            continue
+
+        # Handle extensions if needed
+        if extension_required_code and 'extension' in item and isinstance(item['extension'], list):
+            exts = [
+                ext for ext in item['extension']
+                if ext.get('valueCoding', {}).get('code')
+            ]
+            item['extension'] = exts if exts else None
+
+        # Check top-level fields for validity
+        keep_item = any(item.get(field) for field in (top_fields_required or []))
+
+        # Keep the item if extensions are valid or top fields are valid
+        if keep_item or (item.get('extension')):
+            cleaned_items.append(item)
+
+    # Update or remove the section based on cleaned items
+    if cleaned_items:
+        section_block[items_key] = cleaned_items
+    else:
+        resource.pop(section_key, None)
+
+def clean_section_with_list(resource: dict, section_key: str, top_fields_required: list = None) -> None:
+    """
+    Clean a section of a resource that is a list, such as 'identifier'.
+    """
+    items_list = resource.get(section_key)
+    if not isinstance(items_list, list):
+        return
+
+    cleaned_items = [
+        item for item in items_list
+        if any(item.get(field) for field in (top_fields_required or []))
+    ]
+
+    if cleaned_items:
+        resource[section_key] = cleaned_items
+    else:
+        resource.pop(section_key, None)
+
+def map_condition(row: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Map a row from the Condition table to a FHIR Condition resource.
+    """
     resource = {
         "resourceType": "Condition",
+            "note": [
+        {
+            "text": row.get('BerichtID')
+        }
+    ],
         "id": row.get('BerichtID'),
         "meta": {
             "profile": [
@@ -97,7 +125,6 @@ def map_condition(row):
             "coding": [
                 {
                     "extension": [
-                        
                         {
                             "url": "http://fhir.de/StructureDefinition/icd-10-gm-manifestationscode",
                             "valueCoding": {
@@ -123,11 +150,10 @@ def map_condition(row):
                             }
                         }
                     ],
-                "system": row.get('Kodierte_Diagnose_terminology_id'),
-                "code": row.get('Kodierte_Diagnose_code_string'),
-                "display": row.get('Kodierte_Diagnose')
+                    "system": row.get('Kodierte_Diagnose_terminology_id'),
+                    "code": row.get('Kodierte_Diagnose_code_string'),
+                    "display": row.get('Kodierte_Diagnose')
                 }
-                           
             ]
         },
         "subject": {
@@ -142,17 +168,13 @@ def map_condition(row):
                 "value": row.get('Fall_Kennung')
             }
         },
-    
-        "onsetDateTime": row.get('Feststellungsdatum')
-        ,
+        "onsetDateTime": row.get('Feststellungsdatum'),
         "recordedDate": row.get('Berichtsdatum')
     }
 
-    # Clean up the dictionary to remove None or empty values
-    cleaned_resource = clean_dict(resource)
-    
-    # Further clean up the 'code' and 'severity' sections if necessary
-    clean_code_section(cleaned_resource)
-    clean_severity_section(cleaned_resource)
-    
-    return cleaned_resource
+    # Clean up sections dynamically
+    clean_section_with_items(resource, 'code', 'coding', ["system", "code", "display"], extension_required_code=True)
+    clean_section_with_items(resource, 'severity', 'coding', ["system", "code", "display"])
+    clean_section_with_list(resource, 'identifier', ["value"])
+
+    return resource
