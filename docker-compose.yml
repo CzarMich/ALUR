@@ -1,0 +1,30 @@
+version: "3.9"
+services:
+  pipeline:
+    build: .
+    container_name: pipeline
+    environment:
+      - POLL_INTERVAL=60
+      - USE_BATCH=false
+      - BATCH_SIZE=100
+    volumes:
+      - ./logs:/app/logs
+      - ./conf:/app/conf
+    depends_on:
+      - db
+    restart: always
+
+  db:
+    image: postgres:15
+    container_name: postgres
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: my_password
+      POSTGRES_DB: aql2fhir
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
