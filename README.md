@@ -22,7 +22,7 @@ git push -uf origin main
 
 ## Integrate with your tools
 
-- [ ] [Set up project integrations](https://cau-git.rz.uni-kiel.de/MIKI/refinement/openehr-fhir-mapping/-/settings/integrations)
+- [ ] [Set up project integrations](/openehr-fhir-mapping/-/settings/integrations)
 
 ## Collaborate with your team
 
