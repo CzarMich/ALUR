@@ -1,63 +1,117 @@
 import logging
-import concurrent.futures
-from conf.utils_db_reader import read_table, dynamic_import
-from conf.config import RESOURCES
+import time
+from conf.config import RESOURCES, POLL_INTERVAL, USE_BATCH, BATCH_SIZE
+from conf.utils_db_reader import read_unprocessed_rows, read_unprocessed_rows_in_batch
+from conf.utils_resource import send_fhir_resource, delete_row_from_db
+from importlib import import_module
 
 # Set up logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("CentralProcessor")
 
-def process_resource(resource_name, mapper_module, mapper_function, table_name):
+
+def load_mapper(resource):
     """
-    Process a specific resource by reading from the database, mapping, and sending it to the FHIR server.
+    Dynamically load the mapper function for a resource.
     """
     try:
-        mapper_func = dynamic_import(mapper_module, mapper_function)
-    except ImportError as e:
-        logger.error(f"Error importing {mapper_function} from {mapper_module}: {e}")
+        module = import_module(resource["mapper_module"])
+        return getattr(module, resource["mapper_function"])
+    except (ModuleNotFoundError, AttributeError) as e:
+        logger.error(f"Failed to load mapper for resource {resource['name']}: {e}")
+        return None
+
+
+def process_single_row(resource_name, table_name, row, mapper_func):
+    """
+    Process a single row:
+    1. Map the row to a FHIR resource.
+    2. Send the resource to the FHIR server.
+    3. Delete the row if successful.
+    """
+    try:
+        fhir_resource = mapper_func(row)
+        resource_identifier = (
+            fhir_resource.get("identifier", [{}])[0].get("value")
+            if fhir_resource.get("identifier")
+            else None
+        )
+
+        if not resource_identifier:
+            logger.warning(f"No identifier found for resource: {fhir_resource}")
+            return False
+
+        if send_fhir_resource(resource_name, resource_identifier, fhir_resource):
+            delete_row_from_db(table_name, row["id"])
+            logger.info(f"Successfully processed and deleted row ID {row['id']} for '{resource_name}'.")
+            return True
+        else:
+            logger.error(f"Failed to process resource {resource_name}/{resource_identifier}")
+            return False
+    except Exception as e:
+        logger.error(f"Error processing row {row}: {e}")
+        return False
+
+
+def process_batch(resource_name, table_name, batch, mapper_func):
+    """
+    Process a batch of rows:
+    1. Map rows to FHIR resources.
+    2. Send resources to the FHIR server.
+    3. Delete rows if successful.
+    """
+    try:
+        for row in batch:
+            success = process_single_row(resource_name, table_name, row, mapper_func)
+            if not success:
+                logger.warning(f"Failed to process row ID {row['id']} in batch. Skipping.")
+    except Exception as e:
+        logger.error(f"Error processing batch for resource '{resource_name}': {e}")
+
+
+def process_resource(resource):
+    """
+    Process unprocessed rows for a specific resource:
+    - In batch mode, process rows in batches.
+    - In single-row mode, process rows one at a time.
+    """
+    resource_name = resource["name"]
+    table_name = resource_name.lower()
+
+    # Load the mapper function dynamically
+    mapper_func = load_mapper(resource)
+    if not mapper_func:
+        logger.error(f"Skipping resource {resource_name}: Mapper could not be loaded.")
         return
 
-    rows = read_table(table_name)
-    if not rows:
-        logger.info(f"No rows to process for {resource_name}.")
-        return
-
-    for row in rows:
-        try:
-            fhir_resource = mapper_func(row)
-            logger.info(f"Mapped resource: {fhir_resource}")
-            # Add logic for sending the resource to the FHIR server if required
-        except Exception as e:
-            logger.error(f"Error processing row: {row}. Error: {e}")
+    while True:
+        if USE_BATCH:
+            # Fetch and process in batches
+            batch = read_unprocessed_rows_in_batch(table_name, BATCH_SIZE)
+            if not batch:
+                logger.info(f"No unprocessed rows for resource '{resource_name}'. Pausing for {POLL_INTERVAL} seconds.")
+                time.sleep(POLL_INTERVAL)
+                continue
+            process_batch(resource_name, table_name, batch, mapper_func)
+        else:
+            # Fetch and process one row at a time
+            row = read_unprocessed_rows(table_name)
+            if not row:
+                logger.info(f"No unprocessed rows for resource '{resource_name}'. Pausing for {POLL_INTERVAL} seconds.")
+                time.sleep(POLL_INTERVAL)
+                continue
+            process_single_row(resource_name, table_name, row[0], mapper_func)
 
 
 def main():
     """
-    Main function to process all resources defined in settings.yml.
+    Main entry point for the central processor:
+    1. Iterate over resources defined in settings.yml (via config.py).
+    2. Continuously process each resource dynamically.
     """
-    with concurrent.futures.ThreadPoolExecutor() as executor:
-        futures = []
+    while True:
         for resource in RESOURCES:
-            try:
-                resource_name = resource["name"]
-                mapper_module = resource["mapper_module"]
-                mapper_function = resource["mapper_function"]
-                table_name = resource_name.lower()
-
-                futures.append(
-                    executor.submit(process_resource, resource_name, mapper_module, mapper_function, table_name)
-                )
-            except KeyError as e:
-                logger.error(f"Missing key in resource definition: {e}")
-                continue
-
-        for future in concurrent.futures.as_completed(futures):
-            try:
-                future.result()
-            except Exception as e:
-                logger.error(f"An error occurred: {e}")
-
-logger.info(f"Resource definitions: {RESOURCES}")
+            process_resource(resource)
 
 
 if __name__ == "__main__":

@@ -1,10 +1,33 @@
 import os
 from datetime import timedelta
 from requests_cache import CachedSession
+import sqlite3
+from psycopg2 import pool
+import logging
 from config import (
-    EHR_AUTH_METHOD,EHR_SERVER_USER, EHR_SERVER_PASSWORD,
-    FHIR_SERVER_PASSWORD, FHIR_AUTH_METHOD
+    EHR_AUTH_METHOD, EHR_SERVER_USER, EHR_SERVER_PASSWORD,
+    FHIR_SERVER_PASSWORD, FHIR_AUTH_METHOD, DB_TYPE, DB_FILE, 
+    DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT
 )
+
+logger = logging.getLogger(__name__)
+
+# Initialize PostgreSQL connection pool
+pg_pool = None
+if DB_TYPE == "postgres":
+    try:
+        pg_pool = pool.SimpleConnectionPool(
+            minconn=1,
+            maxconn=10,  # Adjust based on expected workload
+            dbname=DB_NAME,
+            user=DB_USER,
+            password=DB_PASSWORD,
+            host=DB_HOST,
+            port=DB_PORT,
+        )
+        logger.info("Initialized PostgreSQL connection pool.")
+    except Exception as e:
+        logger.error(f"Error initializing PostgreSQL connection pool: {e}")
 
 
 def create_session(
@@ -54,9 +77,55 @@ def create_session(
     return session
 
 
-# Example: Creating sessions for openEHR and FHIR servers.
-# You might do this in main.py or wherever you need them.
+def get_db_connection():
+    """
+    Get a database connection from the pool (PostgreSQL) or create a new one (SQLite).
+    """
+    try:
+        if DB_TYPE == "postgres" and pg_pool:
+            conn = pg_pool.getconn()
+            logger.info("Retrieved connection from PostgreSQL pool.")
+            return conn
+        elif DB_TYPE == "sqlite":
+            conn = sqlite3.connect(DB_FILE)
+            logger.info("Connected to SQLite database.")
+            return conn
+        else:
+            raise ValueError(f"Unsupported database type: {DB_TYPE}")
+    except Exception as e:
+        logger.error(f"Error getting database connection: {e}")
+        raise
 
+
+def release_db_connection(conn):
+    """
+    Release the database connection back to the pool or close it (SQLite).
+    """
+    try:
+        if DB_TYPE == "postgres" and pg_pool:
+            pg_pool.putconn(conn)
+            logger.info("Returned connection to PostgreSQL pool.")
+        elif DB_TYPE == "sqlite":
+            conn.close()
+            logger.info("Closed SQLite database connection.")
+    except Exception as e:
+        logger.error(f"Error releasing database connection: {e}")
+        raise
+
+
+def close_connection_pool():
+    """
+    Close all connections in the PostgreSQL pool.
+    """
+    if DB_TYPE == "postgres" and pg_pool:
+        try:
+            pg_pool.closeall()
+            logger.info("Closed all PostgreSQL connections in the pool.")
+        except Exception as e:
+            logger.error(f"Error closing PostgreSQL connection pool: {e}")
+
+
+# Example: Creating sessions for openEHR and FHIR servers.
 ehr_session = create_session(
     cache_name='ehr_cache',
     auth_method=EHR_AUTH_METHOD,

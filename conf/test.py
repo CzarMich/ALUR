@@ -8,13 +8,13 @@ logger = logging.getLogger(__name__)
 
 # Define your AQL query
 AQL_QUERY = """
-SELECT c/context/start_time/value AS MSH10Timesatmp
+SELECT c/context/start_time/value AS MSH10Timesatmp, v/commit_audit/time_committed/value
 FROM VERSION v
 CONTAINS COMPOSITION c  
-WHERE c/archetype_details/template_id/value = 'KDS_Diagnose_Extended'  
+WHERE c/archetype_details/template_id/value = 'KDS_Diagnose_Extended' AND c/context/start_time/value >"2022-12-01"  AND c/context/start_time/value <"2024-12-01" 
 AND NOT EXISTS c/content[openEHR-EHR-EVALUATION.problem_diagnosis.v1]/data/items[at0002]/value/defining_code
-ORDER BY v/commit_audit/time_committed/value ASC
-LIMIT 10000000
+ORDER BY c/context/start_time/value DESC
+LIMIT 10
 """
 
 # Define resource type for state tracking

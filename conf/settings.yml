@@ -74,6 +74,16 @@ sanitize:
     - CompositionID
     - BerichtID
 
+# Batch processing settings
+processing:
+  use_batch: false           # Enable or disable batch processing
+  batch_size: 100           # Batch size when batch processing is enabled
+
+# Polling settings  
+polling:
+  interval_seconds: 60       # Polling interval in seconds
+
+
 # Example override paths for using absolute paths
 # resources:
 # paths:

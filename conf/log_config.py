@@ -1,85 +1,42 @@
 import logging
 import os
-import yaml
-from dotenv import load_dotenv
+from logging.handlers import RotatingFileHandler
+from conf.config import LOG_FOLDER  # Import the log folder path from config.py
 
-# Load environment variables from a .env file
-dotenv_path = os.path.join(os.path.dirname(__file__), 'environments', '.env')
-load_dotenv(dotenv_path)
+# Define the log file path
+LOG_FILE = os.path.join(LOG_FOLDER, 'application.log')
 
-# Load configuration from config_files.yml
-CONFIG_PATH = os.path.join(os.path.dirname(__file__), 'config_files.yml')
+# Ensure the log folder exists
+os.makedirs(LOG_FOLDER, exist_ok=True)
 
-def load_config():
-    """Load configuration from YAML file."""
-    with open(CONFIG_PATH, 'r') as file:
-        config = yaml.safe_load(file)
-    return config
-
-config = load_config()
-
-# Define BASE_DIR as the directory where the config file is located
-BASE_DIR = os.path.dirname(CONFIG_PATH)
-
-def get_path(key):
-    """Get the absolute path for a given config key."""
-    relative_path = config['paths'].get(key, '')
-    return os.path.join(BASE_DIR, relative_path)
-
-def get_temp_folder_path():
-    """Get the path to the temporary folder."""
-    return get_path('temp_folder')
-
-def get_log_folder_path():
-    """Get the path to the log folder."""
-    return get_path('log_folder')
-
-# Define the path for the log file
-LOG_FOLDER_PATH = get_log_folder_path()
-LOG_FILE_PATH = os.path.join(LOG_FOLDER_PATH, 'application.log')
+def get_log_level():
+    """
+    Retrieve log level from environment variables or default to DEBUG.
+    Environment variable: LOG_LEVEL
+    """
+    log_level = os.getenv('LOG_LEVEL', 'DEBUG').upper()
+    return getattr(logging, log_level, logging.DEBUG)
 
 def setup_logging():
-    """Set up logging configuration."""
-    os.makedirs(LOG_FOLDER_PATH, exist_ok=True)
-    
+    """
+    Set up logging configuration.
+    """
     logger = logging.getLogger()
-    logger.setLevel(logging.DEBUG)
-    
+    logger.setLevel(get_log_level())
+
+    # Define log format
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
     # Console handler
     console_handler = logging.StreamHandler()
     console_handler.setLevel(logging.INFO)
-    
-    # File handler
-    file_handler = logging.FileHandler(LOG_FILE_PATH)
-    file_handler.setLevel(logging.DEBUG)
-    
-    # Define the format for logs
-    formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-    
     console_handler.setFormatter(formatter)
+
+    # File handler with log rotation
+    file_handler = RotatingFileHandler(LOG_FILE, maxBytes=5 * 1024 * 1024, backupCount=5)  # 5MB per file, 5 backups
+    file_handler.setLevel(logging.DEBUG)
     file_handler.setFormatter(formatter)
-    
+
     # Add handlers to the logger
     logger.addHandler(console_handler)
-    logger.addHandler(file_handler)
-
-
-
-
-######### Ensure log folder exists
-os.makedirs(LOG_FOLDER, exist_ok=True)
-
-# Set up logging configuration
-logging.basicConfig(
-    level=logging.DEBUG,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler(os.path.join(LOG_FOLDER, 'app.log')),
-        logging.StreamHandler()  # Optional: also log to console
-    ]
-)
-
-logger = logging.getLogger(__name__)
-
-# Example usage of logger
-logger.info('Logging setup complete.')
+    logger.addHa

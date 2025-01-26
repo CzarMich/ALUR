@@ -85,6 +85,16 @@ FETCH_BY_DATE_ENABLED = yaml_config.get('fetch_by_date', {}).get('enabled', Fals
 FETCH_START_DATE = yaml_config.get('fetch_by_date', {}).get('start_date', "2025-01-01") or None
 FETCH_END_DATE = yaml_config.get('fetch_by_date', {}).get('end_date', "") or None
 
+
+#Polliing Interval
+# Load polling interval from settings.yaml
+# Batch processing settings
+USE_BATCH = yaml_config.get('processing', {}).get('use_batch', False)
+BATCH_SIZE = yaml_config.get('processing', {}).get('batch_size', 1)  # Default batch size is 1 if not set
+POLL_INTERVAL = yaml_config.get('polling', {}).get('interval_seconds', 60)  # Default poll interval is 60 seconds
+
+
+
 # Debugging
 #if __name__ == "__main__":
 #   #print(f"BASE_DIR: {BASE_DIR}")
