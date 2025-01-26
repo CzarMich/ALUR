@@ -15,14 +15,14 @@ Already a pro? Just edit this README.md and make it your own. Want to make it ea
 
 ```
 cd existing_repo
-git remote add origin https://cau-git.rz.uni-kiel.de/MIKI/refinement/openehr-fhir-mapping.git
+git remote add origin https://openehr-fhir-mapping.git
 git branch -M main
 git push -uf origin main
 ```
 
 ## Integrate with your tools
 
-- [ ] [Set up project integrations](https://cau-git.rz.uni-kiel.de/MIKI/refinement/openehr-fhir-mapping/-/settings/integrations)
+- [ ] [Set up project integrations](/openehr-fhir-mapping/-/settings/integrations)
 
 ## Collaborate with your team
 
