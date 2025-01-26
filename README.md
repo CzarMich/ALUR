@@ -15,7 +15,7 @@ Already a pro? Just edit this README.md and make it your own. Want to make it ea
 
 ```
 cd existing_repo
-git remote add origin https://cau-git.rz.uni-kiel.de/MIKI/refinement/openehr-fhir-mapping.git
+git remote add origin https://openehr-fhir-mapping.git
 git branch -M main
 git push -uf origin main
 ```
