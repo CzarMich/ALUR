@@ -4,7 +4,7 @@ from requests_cache import CachedSession
 import sqlite3
 from psycopg2 import pool
 import logging
-from config import (
+from conf.config import (
     EHR_AUTH_METHOD, EHR_SERVER_USER, EHR_SERVER_PASSWORD,
     FHIR_SERVER_PASSWORD, FHIR_AUTH_METHOD, DB_TYPE, DB_FILE, 
     DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT

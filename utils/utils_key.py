@@ -2,7 +2,7 @@ import os
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.backends import default_backend
-from config import KEY_PATH
+from conf.config import KEY_PATH
 
 def generate_key(password: str, salt: bytes) -> bytes:
     """

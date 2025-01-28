@@ -1,8 +1,8 @@
 import os
 import json
 from datetime import datetime
-from utils import get_path
-from config import yaml_config
+from utils.utils import get_path
+from conf.config import yaml_config
 
 def get_last_run_time(resource_type):
     """
@@ -20,12 +20,16 @@ def get_last_run_time(resource_type):
     state_file_path = get_path('state_file')
     if not os.path.exists(state_file_path):
         return None
+
     with open(state_file_path, 'r') as file:
         state = json.load(file)
+
     return state.get(resource_type)
 
 def set_last_run_time(resource_type, run_time):
-    """Set the last run time for a specific resource type."""
+    """
+    Set the last run time for a specific resource type.
+    """
     state_file_path = get_path('state_file')  # Use get_path to get the state file path
     if not os.path.exists(state_file_path):
         state = {}
@@ -43,3 +47,23 @@ def set_last_run_time(resource_type, run_time):
     # Write the updated state back to the file
     with open(state_file_path, 'w') as file:
         json.dump(state, file)
+
+def clear_last_run_time(resource_type):
+    """
+    Clear the last run time for a specific resource type.
+    """
+    state_file_path = get_path('state_file')
+    if not os.path.exists(state_file_path):
+        print(f"State file not found: {state_file_path}")
+        return
+
+    with open(state_file_path, 'r') as file:
+        state = json.load(file)
+
+    if resource_type in state:
+        del state[resource_type]
+
+    with open(state_file_path, 'w') as file:
+        json.dump(state, file)
+
+    print(f"Cleared last run time for resource: {resource_type}")

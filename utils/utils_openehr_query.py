@@ -3,7 +3,7 @@ import urllib.parse
 import logging
 from utils_db import process_records
 from conf.config import EHR_SERVER_URL, RESOURCES
-from conf.utils_session import create_session
+from utils.utils_session import create_session
 
 # Set up logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")

@@ -1,28 +1,16 @@
 import logging
 import time
 from conf.config import RESOURCES, POLL_INTERVAL, USE_BATCH, BATCH_SIZE
-from conf.utils_db_reader import read_unprocessed_rows, read_unprocessed_rows_in_batch
-from conf.utils_resource import send_fhir_resource, delete_row_from_db
-from importlib import import_module
+from utils.utils_db_reader import read_unprocessed_rows, read_unprocessed_rows_in_batch
+from utils.utils_resource import send_fhir_resource, delete_row_from_db
+from utils.utils_mapper import map_and_clean_resource
 
 # Set up logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger("CentralProcessor")
 
 
-def load_mapper(resource):
-    """
-    Dynamically load the mapper function for a resource.
-    """
-    try:
-        module = import_module(resource["mapper_module"])
-        return getattr(module, resource["mapper_function"])
-    except (ModuleNotFoundError, AttributeError) as e:
-        logger.error(f"Failed to load mapper for resource {resource['name']}: {e}")
-        return None
-
-
-def process_single_row(resource_name, table_name, row, mapper_func):
+def process_single_row(resource_name, table_name, row, mappings, required_fields):
     """
     Process a single row:
     1. Map the row to a FHIR resource.
@@ -30,7 +18,17 @@ def process_single_row(resource_name, table_name, row, mapper_func):
     3. Delete the row if successful.
     """
     try:
-        fhir_resource = mapper_func(row)
+        # Map the row dynamically based on mappings and required fields
+        fhir_resource = map_and_clean_resource(row, mappings, required_fields)
+
+        # Print or log the mapped FHIR resource
+        logger.info(f"Generated FHIR resource: {fhir_resource}")
+
+        # Ensure resourceType is included
+        if "resourceType" not in fhir_resource:
+            fhir_resource["resourceType"] = resource_name
+
+        # Extract the identifier for the FHIR resource
         resource_identifier = (
             fhir_resource.get("identifier", [{}])[0].get("value")
             if fhir_resource.get("identifier")
@@ -41,6 +39,7 @@ def process_single_row(resource_name, table_name, row, mapper_func):
             logger.warning(f"No identifier found for resource: {fhir_resource}")
             return False
 
+        # Send the FHIR resource
         if send_fhir_resource(resource_name, resource_identifier, fhir_resource):
             delete_row_from_db(table_name, row["id"])
             logger.info(f"Successfully processed and deleted row ID {row['id']} for '{resource_name}'.")
@@ -53,7 +52,7 @@ def process_single_row(resource_name, table_name, row, mapper_func):
         return False
 
 
-def process_batch(resource_name, table_name, batch, mapper_func):
+def process_batch(resource_name, table_name, batch, mappings, required_fields):
     """
     Process a batch of rows:
     1. Map rows to FHIR resources.
@@ -62,7 +61,7 @@ def process_batch(resource_name, table_name, batch, mapper_func):
     """
     try:
         for row in batch:
-            success = process_single_row(resource_name, table_name, row, mapper_func)
+            success = process_single_row(resource_name, table_name, row, mappings, required_fields)
             if not success:
                 logger.warning(f"Failed to process row ID {row['id']} in batch. Skipping.")
     except Exception as e:
@@ -78,10 +77,11 @@ def process_resource(resource):
     resource_name = resource["name"]
     table_name = resource_name.lower()
 
-    # Load the mapper function dynamically
-    mapper_func = load_mapper(resource)
-    if not mapper_func:
-        logger.error(f"Skipping resource {resource_name}: Mapper could not be loaded.")
+    # Retrieve mappings and required fields from the resource configuration
+    mappings = resource.get("mappings")
+    required_fields = resource.get("required_fields", [])
+    if not mappings:
+        logger.error(f"No mappings defined for resource '{resource_name}'. Skipping.")
         return
 
     while True:
@@ -92,7 +92,7 @@ def process_resource(resource):
                 logger.info(f"No unprocessed rows for resource '{resource_name}'. Pausing for {POLL_INTERVAL} seconds.")
                 time.sleep(POLL_INTERVAL)
                 continue
-            process_batch(resource_name, table_name, batch, mapper_func)
+            process_batch(resource_name, table_name, batch, mappings, required_fields)
         else:
             # Fetch and process one row at a time
             row = read_unprocessed_rows(table_name)
@@ -100,7 +100,7 @@ def process_resource(resource):
                 logger.info(f"No unprocessed rows for resource '{resource_name}'. Pausing for {POLL_INTERVAL} seconds.")
                 time.sleep(POLL_INTERVAL)
                 continue
-            process_single_row(resource_name, table_name, row[0], mapper_func)
+            process_single_row(resource_name, table_name, row[0], mappings, required_fields)
 
 
 def main():

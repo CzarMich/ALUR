@@ -1,13 +1,11 @@
 import logging
 import re
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from conf.utils import get_required_fields
 from conf.config import (
-    PSEUDONYMIZATION_ENABLED, ELEMENTS_TO_PSEUDONYMIZE, 
-    yaml_config
+    PSEUDONYMIZATION_ENABLED, ELEMENTS_TO_PSEUDONYMIZE, RESOURCE_FILES, yaml_config
 )
-from utils_encryption import encrypt_and_shorthand
-from conf.utils_session import get_db_connection, release_db_connection
+from utils.utils_encryption import encrypt_and_shorthand
+from utils.utils_session import get_db_connection, release_db_connection
 
 logger = logging.getLogger(__name__)
 
@@ -16,6 +14,15 @@ SANITIZE_SETTINGS = yaml_config.get('sanitize', {})
 SANITIZE_ENABLED = SANITIZE_SETTINGS.get('enabled', False)
 SANITIZE_FIELDS = SANITIZE_SETTINGS.get('elements_to_sanitize', [])
 
+def get_required_fields(resource_type):
+    """
+    Retrieve required fields for a resource from RESOURCE_FILES.
+
+    :param resource_type: The name of the resource.
+    :return: A list of required fields.
+    """
+    resource_config = RESOURCE_FILES.get(resource_type, {})
+    return resource_config.get("required_fields", [])
 
 def create_table_if_not_exists(table_name, record_fields):
     """
@@ -40,7 +47,6 @@ def create_table_if_not_exists(table_name, record_fields):
     finally:
         release_db_connection(conn)
 
-
 def store_records_in_db(records, table_name):
     """
     Store validated and processed records into the database.
@@ -56,14 +62,12 @@ def store_records_in_db(records, table_name):
         # Ensure the table exists
         create_table_if_not_exists(table_name, records[0].keys())
 
-        # Insert records
-        placeholders = "%s"
-        for record in records:
-            columns = ", ".join(record.keys())
-            placeholders_str = ", ".join([placeholders] * len(record))
-            insert_sql = f"INSERT INTO {table_name} ({columns}) VALUES ({placeholders_str})"
-            cursor.execute(insert_sql, list(record.values()))
+        # Insert records in batches
+        placeholders = ", ".join(["%s"] * len(records[0]))
+        columns = ", ".join(records[0].keys())
+        insert_sql = f"INSERT INTO {table_name} ({columns}) VALUES ({placeholders})"
 
+        cursor.executemany(insert_sql, [list(record.values()) for record in records])
         conn.commit()
         logger.info(f"Stored {len(records)} records in table '{table_name}'.")
     except Exception as e:
@@ -71,7 +75,6 @@ def store_records_in_db(records, table_name):
         raise
     finally:
         release_db_connection(conn)
-
 
 def sanitize_value(field_name, value):
     """
@@ -83,17 +86,15 @@ def sanitize_value(field_name, value):
         return sanitized_value[:64]  # Truncate to 64 characters
     return value
 
-
 def validate_record(record, required_fields):
     """
     Validate a single record by checking required fields.
     """
-    missing_fields = [field for field in required_fields if field not in record]
+    missing_fields = [field for field in required_fields if not record.get(field)]
     if missing_fields:
-        logger.warning(f"Missing required fields: {missing_fields}")
+        logger.warning(f"Record validation failed. Missing required fields: {missing_fields}")
         return False
     return True
-
 
 def encrypt_record_fields(record, key):
     """
@@ -111,19 +112,20 @@ def encrypt_record_fields(record, key):
             encrypted_record[f"{field_name}_ciphertext"] = full_ciphertext
     return encrypted_record
 
-
-def process_record(record, required_fields, key):
+def process_record(record, resource_type, key):
     """
     Validate, sanitize, and encrypt a single record.
     """
+    required_fields = get_required_fields(resource_type)
+
     if not validate_record(record, required_fields):
+        logger.error(f"Record validation failed for resource '{resource_type}'. Skipping.")
         return None
 
     sanitized_record = {field: sanitize_value(field, value) for field, value in record.items()}
     return encrypt_record_fields(sanitized_record, key)
 
-
-def process_records(records, resource_type, key, required_fields, max_workers=3):
+def process_records(records, resource_type, key, max_workers=3):
     """
     Process records: validate, sanitize, encrypt, and store in the database.
     """
@@ -132,24 +134,26 @@ def process_records(records, resource_type, key, required_fields, max_workers=3)
 
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         future_map = {
-            executor.submit(process_record, record, required_fields, key): record
+            executor.submit(process_record, record, resource_type, key): record
             for record in records
         }
 
         for future in as_completed(future_map):
+            record = future_map[future]
             try:
                 processed_record = future.result()
                 if processed_record:
                     valid_records.append(processed_record)
+                else:
+                    logger.warning(f"Record skipped due to validation: {record}")
             except Exception as exc:
-                logger.error(f"Error processing a record: {exc}")
+                logger.error(f"Error processing record {record}: {exc}")
 
     if valid_records:
         store_records_in_db(valid_records, resource_type)
         logger.info(f"Stored {len(valid_records)} records in the database for {resource_type}.")
     else:
         logger.info(f"No valid records to store for {resource_type}.")
-
 
 def mark_row_as_processed(table_name, row_id):
     """

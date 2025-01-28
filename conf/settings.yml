@@ -2,35 +2,41 @@
 
 resources:
   - name: Condition
-    file: condition.xml
+    aql_file: condition.yml
+    mapping_file: condition.yml
     required_fields:
-      - Composition_ID
       - subjectID
     mapper_module: fhir_mapping.condition_mapper
     mapper_function: map_condition
   # Uncomment and add more resources as needed
   # - name: Procedure
-  #   file: procedure.xml
+  #   aql_file: procedure.xml
+  #   mapping_file: procedure.yml
+  #   required_fields:
+  #     - Composition_ID
+  #     - subjectID
+  #   mapper_module: fhir_mapping.procedure_mapper
+  #   mapper_function: map_procedure
 
 fetch_by_date:
-  enabled: true
-  start_date: "2025-01-08"
-  end_date: "2025-01-09" #leave empty for open-ended
+  enabled: true  # Enable or disable fetching by date
+  start_date: "2025-01-08 00:00:00"
+  end_date: ""  # Leave empty for open-ended
 
 paths:
   # Define file paths
   env_file: .env
-  state_file: ../application/state.json
-  temp_folder: ../application/temp
-  db_file: ../application/aql2fhir.db
-  aql_folder: ../openehr_aql
-  log_folder: ../application/logs
+  state_file: data/state.json
+  temp_folder: data/temp
+  db_file: data/aql2fhir.db
+  log_folder: logs/logs
 
 authentication:
   # Authentication method options: basic, bearer, api_key
   method: basic
 
 pseudonymization:
+  GPAS: false # Global Pseudonymization using GPAS
   enabled: true  # Global switch to enable or disable pseudonymization
   elements_to_pseudonymize:
     Composition_ID: 
@@ -54,14 +60,13 @@ pseudonymization:
       enabled: true
       prefix: "BERID_"  # Prefix for encrypted Bericht IDs
 
-database:  #Database connection settings
-  name: sqlite #Database name change to sqllite for small scale testing
+database:  # Database connection settings
+  name: sqlite  # Database name, change to sqlite for small-scale testing
   host: localhost
   port: 5432
   user: postgres
   password: password
   database: aql2fhir
-
 
 sanitize:
   enabled: true
@@ -77,12 +82,11 @@ sanitize:
 # Batch processing settings
 processing:
   use_batch: false           # Enable or disable batch processing
-  batch_size: 100           # Batch size when batch processing is enabled
+  batch_size: 100            # Batch size when batch processing is enabled
 
 # Polling settings  
 polling:
   interval_seconds: 60       # Polling interval in seconds
-
 
 # Example override paths for using absolute paths
 # resources:
@@ -91,6 +95,5 @@ polling:
 #   temp_folder: /opt/application/temp
 #   db_file: /opt/AQL2FHIR/application/temp/db/Aql2FHIR.db
 #   aql_folder: /opt/AQL2FHIR/application/openehr_aql
+#   mapping_folder: /opt/AQL2FHIR/application/mappings
 #   log_folder: /opt/AQL2FHIR/application/logs
-
-

@@ -1,0 +1,34 @@
+Condition:
+  query_template: |
+    SELECT DISTINCT 
+        k/content[openEHR-EHR-ACTION.uksh_einwilligung.v1]/description[at0001]/items[openEHR-EHR-CLUSTER.uksh_consent.v1]/items[openEHR-EHR-CLUSTER.policy.v1]/items[at0005]/value/value AS ConsentPolicy,
+        v/commit_audit/time_committed/value AS TIMECommitted,
+        e/ehr_status/subject/external_ref/id/value AS subjectID,
+        c/context/other_context[at0001]/items[openEHR-EHR-CLUSTER.case_identification.v0]/items[at0001]/value/value AS  encounter_id,
+        c/content[openEHR-EHR-EVALUATION.problem_diagnosis.v1]/data[at0001]/items[openEHR-EHR-CLUSTER.problem_qualifier.v2]/items[at0063]/value/value AS Condition_category,
+        c/content[openEHR-EHR-EVALUATION.problem_diagnosis.v1]/data[at0001]/items[openEHR-EHR-CLUSTER.problem_qualifier.v2]/items[at0063]/value/defining_code/code_string AS Condition_category_code,  
+        c/content[openEHR-EHR-EVALUATION.problem_diagnosis.v1]/data[at0001]/items[at0002]/value/defining_code/code_string AS Condition_code,
+        c/content[openEHR-EHR-EVALUATION.problem_diagnosis.v1]/data[at0001]/items[at0002]/value/value AS Condition_Display,
+        c/content[openEHR-EHR-EVALUATION.problem_diagnosis.v1]/data[at0001]/items[at0002]/value/defining_code/terminology_id/value AS Condition_code_system, 
+        c/content[openEHR-EHR-EVALUATION.problem_diagnosis.v1]/data[at0001]/items[at0003]/value/value AS Condition_recordedDate,
+        c/content[openEHR-EHR-EVALUATION.problem_diagnosis.v1]/data[at0001]/items[at0012]/value/value AS Condition_BodySite,
+        c/content[openEHR-EHR-EVALUATION.problem_diagnosis.v1]/data[at0001]/items[at0012]/value/defining_code/terminology_id/value AS Condition_BodySite_code_system,
+        c/content[openEHR-EHR-EVALUATION.problem_diagnosis.v1]/data[at0001]/items[at0012]/value/defining_code/code_string AS Condition_BodySite_code_string,
+        c/content[openEHR-EHR-EVALUATION.problem_diagnosis.v1]/data[at0001]/items[at0005]/value/value AS Condition_Severity_Display,
+        c/content[openEHR-EHR-EVALUATION.problem_diagnosis.v1]/data[at0001]/items[at0005]/value/defining_code/code_string AS Condition_Severity_Code,
+        c/content[openEHR-EHR-EVALUATION.problem_diagnosis.v1]/data[at0001]/items[at0005]/value/defining_code/terminology_id/value AS Condition_severity_system,
+        c/content[openEHR-EHR-EVALUATION.problem_diagnosis.v1]/data[at0001]/items[openEHR-EHR-CLUSTER.problem_qualifier.v1]/items[at0003]/value/value AS Clinical_status,
+        c/content[openEHR-EHR-EVALUATION.problem_diagnosis.v1]/data[at0001]/items[at0073]/value/value as  Condition_verificationStatus,
+        c/content[openEHR-EHR-EVALUATION.problem_diagnosis.v1]/data[at0001]/items[at0073]/value/defining_code/code_string as  Condition_verificationStatus_Code,
+        c/content[openEHR-EHR-EVALUATION.problem_diagnosis.v1]/data[at0001]/items[at0073]/value/defining_code/terminology_id/value as  Condition_verificationStatus_System
+    FROM EHR e
+    CONTAINS COMPOSITION c[openEHR-EHR-COMPOSITION.report.v1]
+    WHERE c/name/value = '{{composition_name}}'
+      AND v/commit_audit/time_committed/value >= '{{last_run_time}}'
+    ORDER BY v/commit_audit/time_committed/value DESC
+    OFFSET {{offset}} LIMIT {{limit}}
+  parameters:
+    composition_name: "Diagnose"
+    last_run_time: "2024-01-01T00:00:00"
+    offset: 0
+    limit: 10

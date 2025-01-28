@@ -1,0 +1,22 @@
+query_template: |
+  SELECT DISTINCT 
+      p/uid/value AS Procedure_ID,
+      p/context/other_context[at0001]/items[openEHR-EHR-CLUSTER.case_identification.v0]/items[at0001]/value/value AS encounter_id,
+      p/content[openEHR-EHR-ACTION.procedure.v1]/description[at0001]/items[at0002]/value/value AS Procedure_Display,
+      p/content[openEHR-EHR-ACTION.procedure.v1]/description[at0001]/items[at0002]/value/defining_code/code_string AS Procedure_code
+  FROM EHR e
+  CONTAINS COMPOSITION p[openEHR-EHR-COMPOSITION.report.v1]
+  WHERE p/name/value = '{{composition_name}}'
+    AND v/commit_audit/time_committed/value >= '{{last_run_time}}'
+  ORDER BY v/commit_audit/time_committed/value DESC
+  OFFSET {{offset}} LIMIT {{limit}}
+parameters:
+  composition_name: "Procedure"
+  last_run_time: "2024-01-01T00:00:00"
+  offset: 0
+  limit: 10
+mappings:
+  Procedure_ID: "identifier[0].value"
+  encounter_id: "encounter.identifier.value"
+  Procedure_Display: "code.coding[0].display"
+  Procedure_code: "code.coding[0].code"
