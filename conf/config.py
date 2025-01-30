@@ -4,39 +4,72 @@ from dotenv import load_dotenv
 
 # Load environment variables from a .env file
 dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
-load_dotenv(dotenv_path)
+
+# Ensure comments in .env are ignored by manually parsing
+def load_env_vars(dotenv_path):
+    """ Load environment variables manually while ignoring comments. """
+    if os.path.exists(dotenv_path):
+        with open(dotenv_path, "r") as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith("#"):  # Ignore comments
+                    key, value = line.split("=", 1)
+                    os.environ[key.strip()] = value.split("#")[0].strip()  # Ignore inline comments
+
+# Load environment variables safely
+load_env_vars(dotenv_path)
 
 # Base directory for the project
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Load YAML configuration
 def load_yaml_config(yaml_path):
-    with open(yaml_path, 'r') as file:
-        return yaml.safe_load(file)
+    """Load YAML settings safely with error handling."""
+    try:
+        with open(yaml_path, 'r') as file:
+            return yaml.safe_load(file)
+    except FileNotFoundError:
+        raise Exception(f"🔴 ERROR: Configuration file not found at {yaml_path}")
+    except yaml.YAMLError as e:
+        raise Exception(f"🔴 ERROR: Failed to parse YAML file: {e}")
 
 yaml_config = load_yaml_config(os.path.join(BASE_DIR, 'conf', 'settings.yml'))
 
 # Paths for AQL and mappings
 BASE_MAPPING_DIR = os.path.join(BASE_DIR, 'resources')
 
+# Retrieve secure key path
+KEY_PATH = os.getenv("KEY_PATH", os.path.join(os.path.dirname(__file__), "conf", "key", "key.bin"))
+
 # Paths derived from `settings.yml`
-STATE_FILE = os.path.join(BASE_DIR, yaml_config['paths']['state_file'])
-TEMP_FOLDER = os.path.join(BASE_DIR, yaml_config['paths']['temp_folder'])
-DB_FILE = os.path.join(BASE_DIR, yaml_config['paths']['db_file'])
-LOG_FOLDER = os.path.join(BASE_DIR, yaml_config['paths']['log_folder'])
+STATE_FILE = os.path.join(BASE_DIR, yaml_config.get('paths', {}).get('state_file', 'state.json'))
+TEMP_FOLDER = os.path.join(BASE_DIR, yaml_config.get('paths', {}).get('temp_folder', 'temp'))
+DB_FILE = os.path.join(BASE_DIR, yaml_config.get('paths', {}).get('db_file', 'data.db'))
+LOG_FOLDER = os.path.join(BASE_DIR, yaml_config.get('paths', {}).get('log_folder', 'logs'))
+
+# Ensure DB_FILE has the correct extension
+if not DB_FILE.endswith(".db"):
+    DB_FILE += ".db"
 
 # EHR server configurations
 EHR_SERVER_URL = os.getenv("EHR_SERVER_URL", "http://localhost/ehr/rest/v1")  # Default fallback URL
 EHR_SERVER_USER = os.getenv("EHR_SERVER_USER", "admin")
 EHR_SERVER_PASSWORD = os.getenv("EHR_SERVER_PASSWORD", "password")
-EHR_AUTH_METHOD = os.getenv("EHR_AUTH_METHOD", "basic").lower()  # Options: basic, bearer, api_key
+EHR_AUTH_METHOD = os.getenv("EHR_AUTH_METHOD", "basic").strip().lower()  # Ensure lowercase and strip spaces
+
+# Validate authentication method
+if EHR_AUTH_METHOD not in ["basic", "bearer", "api_key"]:
+    raise ValueError(f"🔴 ERROR: Invalid EHR_AUTH_METHOD '{EHR_AUTH_METHOD}'. Allowed: basic, bearer, api_key")
 
 # FHIR server configurations
 FHIR_SERVER_URL = os.getenv("FHIR_SERVER_URL", "http://localhost:8080/fhir")  # Default fallback URL
 FHIR_SERVER_USER = os.getenv("FHIR_SERVER_USER", "")
 FHIR_SERVER_PASSWORD = os.getenv("FHIR_SERVER_PASSWORD", "")
-FHIR_AUTH_METHOD = os.getenv("FHIR_AUTH_METHOD", "basic").lower()  # Options: basic, bearer, api_key
+FHIR_AUTH_METHOD = os.getenv("FHIR_AUTH_METHOD", "basic").strip().lower()  # Ensure lowercase and strip spaces
 
+# Validate authentication method for FHIR
+if FHIR_AUTH_METHOD not in ["basic", "bearer", "api_key"]:
+    raise ValueError(f"🔴 ERROR: Invalid FHIR_AUTH_METHOD '{FHIR_AUTH_METHOD}'. Allowed: basic, bearer, api_key")
 
 # Pseudonymization configuration
 PSEUDONYMIZATION_SETTINGS = yaml_config.get('pseudonymization', {})
@@ -60,28 +93,22 @@ GPAS_CA_CERT = os.getenv("GPAS_CA_CERT") if GPAS_ENABLED else None
 
 # Database configuration
 DB_SETTINGS = yaml_config.get("database", {})
-DB_TYPE = DB_SETTINGS.get("name", "sqlite").lower()
+DB_TYPE = DB_SETTINGS.get("name", "sqlite").strip().lower()
 DB_HOST = DB_SETTINGS.get("host", "localhost")
 DB_PORT = DB_SETTINGS.get("port", 5432)
 DB_USER = DB_SETTINGS.get("user", "user")
 DB_PASSWORD = DB_SETTINGS.get("password", "password")
 DB_NAME = DB_SETTINGS.get("database", "aql2fhir")
 
-# Ensure DB_FILE has the correct extension
-if DB_TYPE == "sqlite" and not DB_FILE.endswith(".db"):
-    DB_FILE += ".db"
-
-# Resources, AQL, and mapping files
 # Resources, AQL, and mapping files
 RESOURCES = yaml_config.get('resources', [])
 RESOURCE_FILES = {
     resource['name']: {
-        "mapping": os.path.join(BASE_MAPPING_DIR, resource['mapping_file']),
+        "mapping": os.path.join(BASE_MAPPING_DIR, resource.get('mapping_file', 'default_mapping.json')),
         "required_fields": resource.get('required_fields', [])  # Include required_fields
     }
     for resource in RESOURCES
 }
-
 
 # Date-based fetching configuration
 FETCH_BY_DATE_ENABLED = yaml_config.get('fetch_by_date', {}).get('enabled', False)
@@ -91,9 +118,7 @@ FETCH_END_DATE = yaml_config.get('fetch_by_date', {}).get('end_date', "") or Non
 # Polling Interval
 USE_BATCH = yaml_config.get('processing', {}).get('use_batch', False)
 BATCH_SIZE = yaml_config.get('processing', {}).get('batch_size', 1)  # Default batch size is 1 if not set
+POLLING_ENABLED = yaml_config.get('polling', {}).get('enabled', False)
 POLL_INTERVAL = yaml_config.get('polling', {}).get('interval_seconds', 60)  # Default poll interval is 60 seconds
 
 # Debugging
-#if __name__ == "__main__":
-#   print(f"RESOURCE_FILES: {RESOURCE_FILES}")
-

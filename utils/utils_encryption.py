@@ -1,4 +1,11 @@
 import os
+import sys
+
+# Ensure the project root is in Python's module search path
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# Add the project root to Python's module search path
+sys.path.insert(0, BASE_DIR)
+
 import base64
 import hashlib
 from typing import Tuple
@@ -7,6 +14,7 @@ from cryptography.hazmat.primitives.padding import PKCS7
 from cryptography.hazmat.backends import default_backend
 from utils.utils_key import load_key
 from conf.config import KEY_PATH, PSEUDONYMIZATION_ENABLED, ELEMENTS_TO_PSEUDONYMIZE
+
 
 
 def load_aes_key():

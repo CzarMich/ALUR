@@ -19,8 +19,8 @@ resources:
   #   mapper_function: map_procedure
 
 fetch_by_date:
-  enabled: true  # Enable or disable fetching by date
-  start_date: "2025-01-08 00:00:00"
+  enabled: false  # Enable or disable fetching by date. When disabled, use default fetch in resources.yml file
+  start_date: "2025-01-29T00:00:00"
   end_date: ""  # Leave empty for open-ended
 
 paths:
@@ -86,6 +86,7 @@ processing:
 
 # Polling settings  
 polling:
+  enabled: false            # Enable or disable polling. Using polling will fetch data at regular intervals
   interval_seconds: 60       # Polling interval in seconds
 
 # Example override paths for using absolute paths

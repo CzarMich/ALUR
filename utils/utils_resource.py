@@ -1,4 +1,10 @@
 import logging
+import os
+import sys
+# Ensure the project root is in Python's module search path
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# Add the project root to Python's module search path
+sys.path.insert(0, BASE_DIR)
 from utils.utils_session import create_session
 from utils.utils_db_reader import get_db_connection, release_db_connection
 from conf.config import FHIR_AUTH_METHOD, FHIR_SERVER_URL, FHIR_SERVER_PASSWORD

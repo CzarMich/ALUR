@@ -1,6 +1,15 @@
+import os
+import sys
+
+# Ensure the project root is in Python's module search path
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# Add the project root to Python's module search path
+sys.path.insert(0, BASE_DIR)
+
 import logging
 from typing import List, Dict, Any
 from utils.utils_session import get_db_connection, release_db_connection
+
 
 logger = logging.getLogger(__name__)
 

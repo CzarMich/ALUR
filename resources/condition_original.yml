@@ -1,7 +1,7 @@
 ---
 Condition:
   query_template: |
-    SELECT
+    SELECT DISTINCT 
       v/commit_audit/time_committed/value AS TIMECommitted,
       e/ehr_status/subject/external_ref/id/value AS subjectID,
       c/context/other_context[at0001]/items[openEHR-EHR-CLUSTER.case_identification.v0]/items[
@@ -41,15 +41,21 @@ Condition:
         defining_code/terminology_id/value AS Condition_verificationStatus_System
     FROM EHR e
     CONTAINS VERSION v
-    CONTAINS COMPOSITION c[openEHR-EHR-COMPOSITION.report.v1]  
-    WHERE c/name/value = '{{composition_name}}'
+    (CONTAINS COMPOSITION c[openEHR-EHR-COMPOSITION.report.v1] AND COMPOSITION k[openEHR-EHR-COMPOSITION.report.v1])
+    WHERE c/name/value = '{{composition_name}}' AND k/name/value = 'UKSH Einwilligung'
+    AND (k/content[openEHR-EHR-ACTION.uksh_einwilligung.v1]/description[at0001]/items[openEHR-EHR-CLUSTER.uksh_consent.v1]/items[openEHR-EHR-CLUSTER.policy.v1]/items[at0006]/value/defining_code/code_string MATCHES {
+            '1.2.276.0.76.3.1.454.1.100.1.1.1.1', 
+            '1.2.276.0.76.3.1.454.1.100.1.1.2.1',
+            '1.2.276.0.76.3.1.454.1.100.1.1.4.1'
+        }
+    )
     AND v/commit_audit/time_committed/value >= '{{last_run_time}}'
     OFFSET {{offset}} LIMIT {{limit}}
   parameters:
     composition_name: "Diagnose"
     last_run_time: "2025-01-29T00:00:00"
     offset: 0
-    limit: 2
+    limit: 5
 
   mappings:
     resourceType: "Condition"

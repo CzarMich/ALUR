@@ -1,7 +1,7 @@
 # tests/test_config.py
 
 import os
-from conf.config import RESOURCE_FILES, STATE_FILE, TEMP_FOLDER, DB_FILE, LOG_FOLDER
+from conf.config import RESOURCE_FILES, STATE_FILE, TEMP_FOLDER, DB_FILE, LOG_FOLDER, KEY_PATH
 import yaml
 
 def test_config_paths():
@@ -16,6 +16,7 @@ def test_config_paths():
         ("TEMP_FOLDER", TEMP_FOLDER),
         ("DB_FILE", os.path.dirname(DB_FILE)),
         ("LOG_FOLDER", LOG_FOLDER),
+        ("KEY_PATH", os.path.dirname(KEY_PATH)),
     ]
 
     for path_name, path in paths_to_check:

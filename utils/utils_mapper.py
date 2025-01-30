@@ -1,6 +1,12 @@
 import logging
 from typing import Any, Dict, List, Union, Optional, Callable
 from jinja2 import Template
+import os
+import sys
+# Ensure the project root is in Python's module search path
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# Add the project root to Python's module search path
+sys.path.insert(0, BASE_DIR)
 
 logger = logging.getLogger("utils.utils_mapper")
 logger.setLevel(logging.INFO)

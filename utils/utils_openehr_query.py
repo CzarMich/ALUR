@@ -1,103 +1,172 @@
-import xml.etree.ElementTree as ET
-import urllib.parse
 import logging
-from utils_db import process_records
-from conf.config import EHR_SERVER_URL, RESOURCES
-from utils.utils_session import create_session
+import os
+import sys
+import requests
+import json  
+from datetime import datetime, timezone
+import time  # ✅ For polling interval
+
+# Ensure the project root is in Python's module search path
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, BASE_DIR)
+
+from utils.utils_db import process_records
+from utils.utils import load_resource_config
+from conf.config import (
+    EHR_SERVER_URL, EHR_AUTH_METHOD, EHR_SERVER_USER, 
+    EHR_SERVER_PASSWORD, KEY_PATH, POLL_INTERVAL, POLLING_ENABLED
+)
+from utils.utils_session import create_session, get_db_connection, release_db_connection
+from utils.utils_state import get_last_run_time, set_last_run_time
 
 # Set up logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
-# Create a reusable session
+# ✅ Create OpenEHR session (CACHING DISABLED)
 ehr_session = create_session(
-    cache_name='ehr_query_cache',
-    auth_method='basic',
-    username='EHR_SERVER_USER',
-    password='EHR_SERVER_PASSWORD',
+    cache_name="ehr_query_cache",
+    expire_days=0,  # ✅ No persistent caching
+    auth_method=EHR_AUTH_METHOD,
+    username=EHR_SERVER_USER if EHR_AUTH_METHOD == "basic" else None,
+    password=EHR_SERVER_PASSWORD if EHR_AUTH_METHOD == "basic" else None,
+    token=None
 )
 
-
-def read_aql_query(file_path: str) -> str:
+def load_encryption_key():
     """
-    Read and return the AQL query from the specified XML file.
-
-    :param file_path: Path to the XML file containing the AQL query.
-    :return: The AQL query as a string.
+    Load the encryption key from the specified KEY_PATH.
+    Ensures the key is in bytes format.
     """
     try:
-        tree = ET.parse(file_path)
-        root = tree.getroot()
-        return root.text.strip()
+        if KEY_PATH and os.path.exists(KEY_PATH):
+            with open(KEY_PATH, "rb") as key_file:
+                key = key_file.read()
+                if key:
+                    return key
     except Exception as e:
-        logger.error(f"Error reading AQL query file '{file_path}': {e}")
+        logger.error(f"Error loading encryption key: {e}")
+    
+    logger.warning("⚠ No valid encryption key found. Proceeding without encryption.")
+    return None
+
+
+def construct_aql_query(resource_name: str, parameters: dict) -> str:
+    """
+    Load and construct an AQL query from the resource configuration,
+    replacing placeholders with actual values.
+    """
+    try:
+        resource_config = load_resource_config(resource_name)
+        aql_query = resource_config.get("query_template", "")
+
+        if not aql_query:
+            raise ValueError(f"Query template missing for resource: {resource_name}")
+
+        # ✅ Replace placeholders in the AQL query
+        for key, value in parameters.items():
+            placeholder = f"{{{{{key}}}}}"  # Creates {{key}} format
+            if placeholder in aql_query:
+                aql_query = aql_query.replace(placeholder, str(value))
+
+        # ✅ If limit is not set, remove "LIMIT {{limit}}" from the query
+        if "LIMIT {{limit}}" in aql_query and "limit" not in parameters:
+            aql_query = aql_query.replace("LIMIT {{limit}}", "")
+
+        return " ".join(aql_query.split())  # ✅ Remove excess whitespace
+
+    except Exception as e:
+        logger.error(f"Error constructing AQL query for {resource_name}: {e}")
         raise
 
 
-def query_resource(resource_type: str, last_run_time: str = None):
+def query_resource(resource_name: str):
     """
     Query a resource from the OpenEHR server using AQL and store results in the database.
-
-    :param resource_type: The name of the resource (e.g., 'Condition').
-    :param last_run_time: The last run time to replace placeholders in the AQL query.
     """
-    file_path = f'openehr_aql/{resource_type}.xml'
-
     try:
-        # Read the AQL query
-        aql_query = read_aql_query(file_path)
+        conn = get_db_connection()
 
-        # Replace placeholders in the AQL query
-        if last_run_time:
-            aql_query = aql_query.replace('{{last_run_time}}', last_run_time)
-        else:
-            aql_query = aql_query.replace('{{last_run_time}}', '2024-03-06')
+        # ✅ Load parameters dynamically from the YAML resource file
+        resource_config = load_resource_config(resource_name)
+        default_parameters = resource_config.get("parameters", {})
 
-        logger.info(f"Constructed AQL Query for {resource_type}: {aql_query}")
+        parameters = {
+            "last_run_time": get_last_run_time(resource_name) or default_parameters.get("last_run_time", "2025-01-01T00:00:00"),
+            "composition_name": default_parameters.get("composition_name", "Diagnose"),
+            "offset": default_parameters.get("offset", 0),
+        }
 
-        # Encode the AQL query for the URL
-        encoded_query = urllib.parse.quote(aql_query)
-        url = f"{EHR_SERVER_URL}/query?aql={encoded_query}"
+        # ✅ Add limit ONLY IF it's specified in YAML
+        if "limit" in default_parameters:
+            parameters["limit"] = default_parameters["limit"]
 
-        # Use the reusable session from `utils_sessions`
-        response = ehr_session.get(url)
-        response.raise_for_status()
+        logger.info(f"✅ Loaded parameters for {resource_name}: {parameters}")
 
-        if response.status_code == 200:
-            result_set = response.json().get('resultSet', [])
-            if not result_set:
-                logger.info(f"No records found for the query on {resource_type}.")
-                return
+        batch_size = parameters.get("limit", None)  # Can be None if limit is not set
 
-            logger.info(f"Retrieved {len(result_set)} records for {resource_type}.")
+        while True:
+            # ✅ Construct AQL query with correct pagination
+            aql_query = construct_aql_query(resource_name, parameters)
 
-            # Retrieve resource-specific configurations
-            resource_config = next((r for r in RESOURCES if r["name"] == resource_type), None)
-            if not resource_config:
-                logger.warning(f"Resource configuration not found for {resource_type}.")
-                return
+            url = f"{EHR_SERVER_URL}/rest/v1/query"
+            query_payload = json.dumps({"aql": aql_query}, ensure_ascii=False)
 
-            required_fields = resource_config.get("required_fields", [])
-
-            # Process and store the results in the database
-            process_records(
-                records=result_set,
-                resource_type=resource_type,
-                key=None,  # Encryption key, if needed, can be passed here
-                required_fields=required_fields
+            # ✅ Send query request (NO CACHING)
+            response = ehr_session.post(
+                url,
+                data=query_payload,
+                headers={"Content-Type": "application/json"},
+                params={"_": str(os.urandom(16))}  # Bypass cache with random query param
             )
-            logger.info(f"Successfully processed and stored records for {resource_type}.")
-        elif response.status_code == 204:
-            logger.info(f"No content found for the query on {resource_type}.")
-        else:
-            logger.error(f"Unexpected response: {response.status_code} - {response.text}")
 
+            if response.status_code == 200:
+                result_set = response.json().get("resultSet", [])
+                if not result_set:
+                    logger.info(f"✅ No more records found for {resource_name}. Stopping pagination.")
+                    break
+
+                logger.info(f"✅ Retrieved {len(result_set)} records for {resource_name}.")
+
+                # ✅ Load encryption key and ensure it is bytes
+                encryption_key = load_encryption_key()
+                if encryption_key and isinstance(encryption_key, str):
+                    encryption_key = encryption_key.encode()
+
+                process_records(records=result_set, resource_type=resource_name, key=encryption_key)
+
+                # ✅ Use system time as last_run_time AFTER committing records
+                latest_time = datetime.now(timezone.utc).isoformat()
+                set_last_run_time(resource_name, latest_time)
+
+                # ✅ Stop fetching if fewer records than batch size are received
+                if batch_size and len(result_set) < batch_size:
+                    logger.info(f"✅ No more records available for {resource_name}. Stopping pagination.")
+                    break 
+
+                # ✅ Update offset for next batch
+                parameters["offset"] += batch_size if batch_size else len(result_set)
+
+            else:
+                logger.error(f"🔴 Error querying {resource_name}: {response.status_code} - {response.text}")
+                break  # ✅ Stop if an error occurs
+
+            if not POLLING_ENABLED:
+                logger.info("✅ Polling is disabled. Running query only once.")
+                break
+
+            logger.info(f"⏳ Waiting for {POLL_INTERVAL} seconds before next query...")
+            time.sleep(POLL_INTERVAL)
+
+    except requests.RequestException as e:
+        logger.error(f"🔴 Request failed for {resource_name}: {e}")
     except Exception as e:
-        logger.error(f"Error occurred while querying {resource_type}: {e}")
-        raise
+        logger.error(f"🔴 General error occurred while querying {resource_name}: {e}")
+    finally:
+        if conn:
+            release_db_connection(conn)
 
 
-# Example usage
+# Run if executed directly
 if __name__ == "__main__":
-    # Replace 'Condition' with the desired resource type and provide a last run time if needed
-    query_resource('Condition', last_run_time='2025-01-01T00:00:00Z')
+    query_resource('Condition')

@@ -1,10 +1,16 @@
 import logging
 import time
+import os
+import sys
 from conf.config import RESOURCES, POLL_INTERVAL, USE_BATCH, BATCH_SIZE
 from utils.utils_db_reader import read_unprocessed_rows, read_unprocessed_rows_in_batch
 from utils.utils_resource import send_fhir_resource, delete_row_from_db
 from utils.utils_mapper import map_and_clean_resource
 
+# Ensure the project root is in Python's module search path
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# Add the project root to Python's module search path
+sys.path.insert(0, BASE_DIR)
 # Set up logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger("CentralProcessor")

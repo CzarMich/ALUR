@@ -1,5 +1,8 @@
+import os
+import sys
 import logging
 import re
+import sqlite3  # ✅ Ensure SQLite is properly imported
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from conf.config import (
     PSEUDONYMIZATION_ENABLED, ELEMENTS_TO_PSEUDONYMIZE, RESOURCE_FILES, yaml_config
@@ -35,43 +38,49 @@ def create_table_if_not_exists(table_name, record_fields):
         field_definitions += ", processed BOOLEAN DEFAULT FALSE"
         create_table_sql = f"""
         CREATE TABLE IF NOT EXISTS {table_name} (
-            id SERIAL PRIMARY KEY, {field_definitions}
+            id INTEGER PRIMARY KEY AUTOINCREMENT, {field_definitions}
         )
         """
         cursor.execute(create_table_sql)
         conn.commit()
-        logger.info(f"Table '{table_name}' ensured to exist.")
+        logger.info(f"✅ Table '{table_name}' ensured to exist.")
     except Exception as e:
-        logger.error(f"Error creating table '{table_name}': {e}")
+        logger.error(f"🔴 Error creating table '{table_name}': {e}")
         raise
     finally:
         release_db_connection(conn)
 
 def store_records_in_db(records, table_name):
     """
-    Store validated and processed records into the database.
+    Store validated and processed records into the SQLite database.
     Create the table if it does not exist and insert new records.
     """
     if not records:
-        logger.info(f"No records to store for table '{table_name}'.")
+        logger.info(f"⚠ No records to store for table '{table_name}'.")
         return
 
     conn = get_db_connection()
     cursor = conn.cursor()
     try:
-        # Ensure the table exists
+        # ✅ Ensure the table exists
         create_table_if_not_exists(table_name, records[0].keys())
 
-        # Insert records in batches
-        placeholders = ", ".join(["%s"] * len(records[0]))
+        # ✅ Use SQLite-compatible ? placeholders
+        placeholders = ", ".join(["?"] * len(records[0]))
         columns = ", ".join(records[0].keys())
         insert_sql = f"INSERT INTO {table_name} ({columns}) VALUES ({placeholders})"
 
-        cursor.executemany(insert_sql, [list(record.values()) for record in records])
+        # ✅ Convert values to tuples for safe parameterized queries
+        cursor.executemany(insert_sql, [tuple(record.values()) for record in records])
         conn.commit()
-        logger.info(f"Stored {len(records)} records in table '{table_name}'.")
+
+        logger.info(f"✅ Stored {len(records)} records in table '{table_name}'.")
+
+    except sqlite3.Error as e:
+        logger.error(f"🔴 SQLite Error storing records in '{table_name}': {e}")
+        raise
     except Exception as e:
-        logger.error(f"Error storing records in table '{table_name}': {e}")
+        logger.error(f"🔴 General Error storing records in '{table_name}': {e}")
         raise
     finally:
         release_db_connection(conn)
@@ -92,7 +101,7 @@ def validate_record(record, required_fields):
     """
     missing_fields = [field for field in required_fields if not record.get(field)]
     if missing_fields:
-        logger.warning(f"Record validation failed. Missing required fields: {missing_fields}")
+        logger.warning(f"⚠ Record validation failed. Missing required fields: {missing_fields}")
         return False
     return True
 
@@ -119,7 +128,7 @@ def process_record(record, resource_type, key):
     required_fields = get_required_fields(resource_type)
 
     if not validate_record(record, required_fields):
-        logger.error(f"Record validation failed for resource '{resource_type}'. Skipping.")
+        logger.error(f"⚠ Record validation failed for resource '{resource_type}'. Skipping.")
         return None
 
     sanitized_record = {field: sanitize_value(field, value) for field, value in record.items()}
@@ -129,7 +138,7 @@ def process_records(records, resource_type, key, max_workers=3):
     """
     Process records: validate, sanitize, encrypt, and store in the database.
     """
-    logger.info(f"Processing {len(records)} records for resource: {resource_type}")
+    logger.info(f"🔄 Processing {len(records)} records for resource: {resource_type}")
     valid_records = []
 
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
@@ -145,15 +154,15 @@ def process_records(records, resource_type, key, max_workers=3):
                 if processed_record:
                     valid_records.append(processed_record)
                 else:
-                    logger.warning(f"Record skipped due to validation: {record}")
+                    logger.warning(f"⚠ Record skipped due to validation: {record}")
             except Exception as exc:
-                logger.error(f"Error processing record {record}: {exc}")
+                logger.error(f"🔴 Error processing record {record}: {exc}")
 
     if valid_records:
         store_records_in_db(valid_records, resource_type)
-        logger.info(f"Stored {len(valid_records)} records in the database for {resource_type}.")
+        logger.info(f"✅ Stored {len(valid_records)} records in the database for {resource_type}.")
     else:
-        logger.info(f"No valid records to store for {resource_type}.")
+        logger.info(f"⚠ No valid records to store for {resource_type}.")
 
 def mark_row_as_processed(table_name, row_id):
     """
@@ -162,12 +171,15 @@ def mark_row_as_processed(table_name, row_id):
     conn = get_db_connection()
     cursor = conn.cursor()
     try:
-        query = f"UPDATE {table_name} SET processed = TRUE WHERE id = %s"
+        query = f"UPDATE {table_name} SET processed = TRUE WHERE id = ?"
         cursor.execute(query, (row_id,))
         conn.commit()
-        logger.info(f"Marked row ID {row_id} as processed in table '{table_name}'.")
+        logger.info(f"✅ Marked row ID {row_id} as processed in table '{table_name}'.")
+    except sqlite3.Error as e:
+        logger.error(f"🔴 SQLite Error marking row ID {row_id} as processed: {e}")
+        raise
     except Exception as e:
-        logger.error(f"Error marking row ID {row_id} as processed in table '{table_name}': {e}")
+        logger.error(f"🔴 General Error marking row ID {row_id} as processed: {e}")
         raise
     finally:
         release_db_connection(conn)

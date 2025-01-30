@@ -38,48 +38,4 @@ Security:
 
 Ensure sensitive data such as API credentials are stored securely and consider using environment variable management tools for better security practices.
 
-Improved Logging:
-
-import logging
-
-# Configure logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-
-# Example usage of logging
-logging.info(f"Temporary folder created at: {TEMP_FOLDER}")
-
-# Replace all print statements with appropriate logging methods
-
-
-
-Improve Error Handling:
-
-def load_data_into_db(temp_file_path, table_name):
-    """Load JSON data from a file into a specified table in an SQLite database."""
-    db_path = get_db_path()
-    try:
-        conn = sqlite3.connect(db_path)
-        cursor = conn.cursor()
-
-        with open(temp_file_path, 'r', encoding='utf-8') as temp_file:
-            data = json.load(temp_file)
-
-            if not data:
-                logging.warning("No data found in the temporary file.")
-                return conn, cursor
-
-            if isinstance(data, list):
-                for record in data:
-                    create_or_update_table(cursor, table_name, record)
-                    insert_record(cursor, table_name, record)
-            else:
-                create_or_update_table(cursor, table_name, data)
-                insert_record(cursor, table_name, data)
-        
-        conn.commit()
-    except sqlite3.Error as e:
-        logging.error(f"SQLite error: {e}")
-    except Exception as e:
-        logging.error(f"Unexpected error: {e}")
-    finally:
-        return conn, cursor
+export PYTHONPATH=/UserDirectory/openehr-fhir-mapping

@@ -1,8 +1,13 @@
 import os
+import sys
 import json
 from datetime import datetime
 from utils.utils import get_path
 from conf.config import yaml_config
+
+# Ensure the project root is in Python's module search path
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, BASE_DIR)
 
 def get_last_run_time(resource_type):
     """
@@ -30,15 +35,17 @@ def set_last_run_time(resource_type, run_time):
     """
     Set the last run time for a specific resource type.
     """
-    state_file_path = get_path('state_file')  # Use get_path to get the state file path
+    state_file_path = get_path('state_file')
     if not os.path.exists(state_file_path):
         state = {}
     else:
         with open(state_file_path, 'r') as file:
             state = json.load(file)
 
-    # Format time as 'YYYY-MM-DD HH:MM:SS'
-    formatted_time = datetime.fromisoformat(run_time).strftime('%Y-%m-%d %H:%M:%S')
+    # ✅ Format time as 'YYYY-MM-DDTHH:MM:SS' to match OpenEHR API expectations
+    # ✅ Ensure correct timestamp format by stripping milliseconds and "Z"
+    formatted_time = run_time.split(".")[0].replace("Z", "")  # Removes milliseconds and Z
+
     state[resource_type] = formatted_time
 
     # Ensure the directory exists

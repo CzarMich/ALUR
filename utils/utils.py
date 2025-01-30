@@ -1,4 +1,9 @@
 import os
+import sys
+# Ensure the project root is in Python's module search path
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# Add the project root to Python's module search path
+sys.path.insert(0, BASE_DIR)
 import json
 import yaml
 from datetime import datetime, timedelta
