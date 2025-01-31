@@ -2,29 +2,34 @@
 
 resources:
   - name: Condition
+    priority: 1  # Priority 1: Fetch every 30 minutes, P2: 2 hours, P3: 12 hours, P4: 24 hours.
     aql_file: condition.yml
     mapping_file: condition.yml
     required_fields:
       - subjectID
     mapper_module: fhir_mapping.condition_mapper
     mapper_function: map_condition
-  # Uncomment and add more resources as needed
-  # - name: Procedure
-  #   aql_file: procedure.xml
-  #   mapping_file: procedure.yml
-  #   required_fields:
-  #     - Composition_ID
-  #     - subjectID
-  #   mapper_module: fhir_mapping.procedure_mapper
-  #   mapper_function: map_procedure
 
 fetch_by_date:
-  enabled: false  # Enable or disable fetching by date. When disabled, use default fetch in resources.yml file
+  enabled: false  # Enable or disable fetching by date
   start_date: "2025-01-29T00:00:00"
-  end_date: ""  # Leave empty for open-ended
+  end_date: ""  # Leave empty for open-ended fetch
+  fetch_interval_hours: 6  # ✅ Set fetch frequency in hours (e.g., 6 hours)
+
+polling:
+  enabled: false  # ✅ Enable global polling
+  interval_seconds: 1800  # ✅ Global polling every 30 minutes (1800 seconds)
+  max_parallel_fetches: 3  # ✅ Limit concurrent fetches
+
+priority_fetching:
+  enabled: false  # ✅ Enable or disable priority-based fetching
+  priority_levels:
+    1: 30   # Fetch Priority 1 every 30 minutes
+    2: 120  # Fetch Priority 2 every 2 hours
+    3: 720  # Fetch Priority 3 every 12 hours
+    4: 1440 # Fetch Priority 4 every 24 hours
 
 paths:
-  # Define file paths
   env_file: .env
   state_file: data/state.json
   temp_folder: data/temp
@@ -32,36 +37,36 @@ paths:
   log_folder: logs/logs
 
 authentication:
-  # Authentication method options: basic, bearer, api_key
-  method: basic
+  method: basic  # ✅ Supported options: basic, bearer, api_key
 
 pseudonymization:
-  GPAS: false # Global Pseudonymization using GPAS
+  GPAS: false  # Enable GPAS pseudonymization
   enabled: true  # Global switch to enable or disable pseudonymization
+  use_deterministic_aes: true  # ✅ NEW: Use deterministic encryption if True
   elements_to_pseudonymize:
     Composition_ID: 
       enabled: true
-      prefix: "EHRID-"  # Prefix to add to the pseudonymized value
+      prefix: "EHRID-"
     subjectID: 
       enabled: true
-      prefix: "PID_"  # Prefix for encrypted Subject IDs
+      prefix: "PID_"
     encounter_id:
       enabled: true
-      prefix: "FALLID_"  # Prefix for encrypted Encounter IDs
+      prefix: "FALLID_"
     Patient_DOB:
-      enabled: false  # No pseudonymization for DOB
+      enabled: false
     LaboranfoderungID:
       enabled: true
-      prefix: "LAB_"  # Prefix for encrypted Laboranfoderung IDs
+      prefix: "LAB_"
     CompositionID:
       enabled: true
-      prefix: "COMPID_"  # Prefix for encrypted Composition IDs
+      prefix: "COMPID_"
     BerichtID:
       enabled: true
-      prefix: "BERID_"  # Prefix for encrypted Bericht IDs
+      prefix: "BERID_"
 
-database:  # Database connection settings
-  name: sqlite  # Database name, change to sqlite for small-scale testing
+database:
+  name: sqlite  # Change to `postgres` for PostgreSQL
   host: localhost
   port: 5432
   user: postgres
@@ -79,15 +84,19 @@ sanitize:
     - CompositionID
     - BerichtID
 
-# Batch processing settings
 processing:
-  use_batch: false           # Enable or disable batch processing
-  batch_size: 100            # Batch size when batch processing is enabled
+  use_batch: false
+  batch_size: 100  # ✅ Set batch size for processing
 
-# Polling settings  
-polling:
-  enabled: false            # Enable or disable polling. Using polling will fetch data at regular intervals
-  interval_seconds: 60       # Polling interval in seconds
+server_health_check:
+  enabled: true
+  retry_interval_seconds: 20  # ✅ Retry every 20 seconds
+  max_retries: null  # ✅ Unlimited retries (use `null` instead of "unlimited")
+
+query_retries:
+  enabled: true
+  retry_count: 3  # ✅ Maximum retries for failed queries
+  retry_interval_seconds: 10  # ✅ Wait 10 seconds before retrying
 
 # Example override paths for using absolute paths
 # resources:

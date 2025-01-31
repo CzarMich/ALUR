@@ -5,7 +5,8 @@ import re
 import sqlite3  # ✅ Ensure SQLite is properly imported
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from conf.config import (
-    PSEUDONYMIZATION_ENABLED, ELEMENTS_TO_PSEUDONYMIZE, RESOURCE_FILES, yaml_config
+    PSEUDONYMIZATION_ENABLED, ELEMENTS_TO_PSEUDONYMIZE, PSEUDONYMIZATION_DETERMINISTIC_AES,
+    RESOURCE_FILES, yaml_config
 )
 from utils.utils_encryption import encrypt_and_shorthand
 from utils.utils_session import get_db_connection, release_db_connection
@@ -108,6 +109,7 @@ def validate_record(record, required_fields):
 def encrypt_record_fields(record, key):
     """
     Dynamically encrypt fields in a record based on pseudonymization settings.
+    Supports both deterministic and non-deterministic AES modes.
     """
     if not PSEUDONYMIZATION_ENABLED:
         return record
@@ -116,9 +118,12 @@ def encrypt_record_fields(record, key):
     for field_name, value in record.items():
         element_config = ELEMENTS_TO_PSEUDONYMIZE.get(field_name, {})
         if element_config.get("enabled", False):
-            full_ciphertext, short_id = encrypt_and_shorthand(str(value), field_name, key)
+            full_ciphertext, short_id = encrypt_and_shorthand(
+                str(value), field_name, key
+            )
             encrypted_record[field_name] = short_id
             encrypted_record[f"{field_name}_ciphertext"] = full_ciphertext
+
     return encrypted_record
 
 def process_record(record, resource_type, key):

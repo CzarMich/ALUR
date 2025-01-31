@@ -1,11 +1,9 @@
 import os
 import sys
-
 # Ensure the project root is in Python's module search path
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Add the project root to Python's module search path
 sys.path.insert(0, BASE_DIR)
-
 import base64
 import hashlib
 from typing import Tuple
@@ -15,19 +13,32 @@ from cryptography.hazmat.backends import default_backend
 from utils.utils_key import load_key
 from conf.config import KEY_PATH, PSEUDONYMIZATION_ENABLED, ELEMENTS_TO_PSEUDONYMIZE
 
+import logging
 
+logger = logging.getLogger(__name__)
+
+# ✅ Load deterministic AES setting from config
+from conf.config import PSEUDONYMIZATION_DETERMINISTIC_AES
 
 def load_aes_key():
     """Load the AES key from the configured KEY_PATH."""
     return load_key(KEY_PATH)
 
+def derive_iv(plaintext: str) -> bytes:
+    """
+    Generate a deterministic IV from a SHA-256 hash of the input.
+    Ensures that encrypting the same input always results in the same ciphertext.
+    """
+    return hashlib.sha256(plaintext.encode("utf-8")).digest()[:16]  # First 16 bytes
 
 def aes_encrypt(plaintext: str, aes_key: bytes) -> str:
     """
-    Encrypt a plaintext string using AES-CBC (with random IV),
-    returning a Base64 string of (IV + ciphertext), without any prefix.
+    Encrypt a plaintext string using AES-CBC.
+    If deterministic AES is enabled, uses a derived IV for consistency.
+    Otherwise, generates a random IV.
     """
-    iv = os.urandom(16)
+    iv = derive_iv(plaintext) if PSEUDONYMIZATION_DETERMINISTIC_AES else os.urandom(16)  # ✅ Choose IV mode
+
     padder = PKCS7(algorithms.AES.block_size).padder()
     padded_data = padder.update(plaintext.encode("utf-8")) + padder.finalize()
 
@@ -35,18 +46,27 @@ def aes_encrypt(plaintext: str, aes_key: bytes) -> str:
     encryptor = cipher.encryptor()
     ciphertext = encryptor.update(padded_data) + encryptor.finalize()
 
-    combined = iv + ciphertext
+    combined = iv + ciphertext  # Include IV in the output for safety
     return base64.b64encode(combined).decode("utf-8")
 
-
-def aes_decrypt(ciphertext_b64: str, aes_key: bytes) -> str:
+def aes_decrypt(ciphertext_b64: str, aes_key: bytes, plaintext_hint: str = None) -> str:
     """
-    Decrypt Base64(IV + ciphertext) from aes_encrypt(),
-    returning the original plaintext string.
+    Decrypt AES-CBC ciphertext.
+    If deterministic AES is enabled, derives the IV from plaintext_hint.
+    Otherwise, extracts IV from the ciphertext itself.
     """
     data = base64.b64decode(ciphertext_b64)
-    iv = data[:16]
-    ct = data[16:]
+    
+    if PSEUDONYMIZATION_DETERMINISTIC_AES:
+        if not plaintext_hint:
+            logger.error("❌ Decryption failed: plaintext_hint is required for deterministic AES.")
+            return ciphertext_b64  # Fallback to ciphertext
+
+        iv = derive_iv(plaintext_hint)  # ✅ Ensure IV is derived the same way
+        ct = data  # No IV stored in deterministic mode
+    else:
+        iv = data[:16]  # First 16 bytes are the IV
+        ct = data[16:]
 
     cipher = Cipher(algorithms.AES(aes_key), modes.CBC(iv), backend=default_backend())
     decryptor = cipher.decryptor()
@@ -57,40 +77,6 @@ def aes_decrypt(ciphertext_b64: str, aes_key: bytes) -> str:
 
     return plaintext.decode("utf-8")
 
-
-def create_short_handle(ciphertext_b64: str) -> str:
-    """
-    Create a short handle (hash-based) from the raw AES ciphertext.
-    Ensures no invalid characters or length issues for FHIR or other constraints.
-    """
-    sha_digest = hashlib.sha256(ciphertext_b64.encode("utf-8")).digest()
-
-    # Base64-URL encode to remove +,/ etc.; then remove '='
-    b64_url = base64.urlsafe_b64encode(sha_digest).decode("utf-8").rstrip("=")
-
-    # Replace '_' with '.' to fully meet [A-Za-z0-9-.] if needed
-    b64_url = b64_url.replace("_", ".")
-
-    return b64_url
-
-
-def append_dynamic_prefix(element_name: str, short_handle: str, max_len: int = 64) -> str:
-    """
-    Check PSEUDONYMIZATION config for the element to see if a prefix is defined.
-    If so, append it to the short handle, ensuring total length doesn't exceed max_len.
-    """
-    element_config = ELEMENTS_TO_PSEUDONYMIZE.get(element_name, {})
-    prefix = element_config.get("prefix", "") if element_config.get("enabled", False) else ""
-    if not prefix:
-        return short_handle  # No prefix to append
-
-    # Truncate if total length would exceed max_len
-    allowed_after_prefix = max_len - len(prefix)
-    truncated_handle = short_handle[:allowed_after_prefix]
-
-    return prefix + truncated_handle
-
-
 def encrypt_and_shorthand(
     plaintext: str,
     element_name: str,
@@ -98,13 +84,10 @@ def encrypt_and_shorthand(
     max_len: int = 64
 ) -> Tuple[str, str]:
     """
-    1) If the field is not configured or pseudonymization is disabled, return (plaintext, plaintext).
-    2) Otherwise, AES-encrypt the plaintext -> raw ciphertext in Base64 (no prefix).
-    3) Create a short handle from that ciphertext.
-    4) Dynamically append prefix from config if present.
+    Encrypts and creates a shorthand for the given plaintext.
+    Uses **deterministic AES** if enabled in settings.
     :return: (raw_ciphertext_b64, shortID_with_prefix)
     """
-    # Skip encryption if globally disabled or element not in config / not enabled
     if (
         not PSEUDONYMIZATION_ENABLED
         or element_name not in ELEMENTS_TO_PSEUDONYMIZE
@@ -112,44 +95,33 @@ def encrypt_and_shorthand(
     ):
         return plaintext, plaintext
 
-    # 1) Raw AES encryption
+    # 1) Encrypt (deterministic or standard based on settings)
     raw_ciphertext = aes_encrypt(plaintext, aes_key)
 
     # 2) Create short handle
-    short_handle = create_short_handle(raw_ciphertext)
+    short_handle = hashlib.sha256(raw_ciphertext.encode("utf-8")).hexdigest()[:16]  # Short hash
 
     # 3) Append dynamic prefix from config
-    short_id = append_dynamic_prefix(element_name, short_handle, max_len)
+    prefix = ELEMENTS_TO_PSEUDONYMIZE[element_name].get("prefix", "")
+    short_id = f"{prefix}{short_handle}" if prefix else short_handle
 
     return raw_ciphertext, short_id
 
-
-def decrypt_with_ciphertext(ciphertext_b64: str, aes_key: bytes, element_name: str = None) -> str:
+def decrypt_with_ciphertext(ciphertext_b64: str, aes_key: bytes, plaintext_hint: str = None, element_name: str = None) -> str:
     """
-    Decrypt the raw AES ciphertext (no prefix) to get the original plaintext.
-    If the field is not configured for encryption or pseudonymization is disabled,
-    return the string as-is (skip base64 decoding).
+    Decrypt AES-CBC ciphertext using **deterministic or standard mode**.
+    If deterministic AES is enabled, requires plaintext_hint.
     """
-    # If element_name is unknown or we are not enabled, skip
     if (
         not PSEUDONYMIZATION_ENABLED
         or not element_name
         or element_name not in ELEMENTS_TO_PSEUDONYMIZE
         or not ELEMENTS_TO_PSEUDONYMIZE[element_name].get("enabled", False)
     ):
-        # Attempt to detect if ciphertext_b64 is truly base64 or just plaintext
-        # We can do a quick check:
-        # If it fails b64decode => return as is
-        try:
-            base64.b64decode(ciphertext_b64)
-        except Exception:
-            return ciphertext_b64
-        # If it does decode, but we never intended to encrypt it, let's just return as is
-        return ciphertext_b64
+        return ciphertext_b64  # No encryption applied, return as is
 
-    # Otherwise, decrypt
     try:
-        return aes_decrypt(ciphertext_b64, aes_key)
+        return aes_decrypt(ciphertext_b64, aes_key, plaintext_hint)
     except Exception:
-        # In case it's not valid base64, fallback to as-is
+        logger.error(f"❌ Decryption failed for {element_name}. Returning ciphertext as fallback.")
         return ciphertext_b64

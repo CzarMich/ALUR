@@ -71,25 +71,22 @@ FHIR_AUTH_METHOD = os.getenv("FHIR_AUTH_METHOD", "basic").strip().lower()  # Ens
 if FHIR_AUTH_METHOD not in ["basic", "bearer", "api_key"]:
     raise ValueError(f"🔴 ERROR: Invalid FHIR_AUTH_METHOD '{FHIR_AUTH_METHOD}'. Allowed: basic, bearer, api_key")
 
-# Pseudonymization configuration
-PSEUDONYMIZATION_SETTINGS = yaml_config.get('pseudonymization', {})
-PSEUDONYMIZATION_ENABLED = PSEUDONYMIZATION_SETTINGS.get('enabled', False)
-GPAS_ENABLED = PSEUDONYMIZATION_SETTINGS.get('GPAS', False)  # Load GPAS-specific flag
+# Fetch by date configuration
+FETCH_BY_DATE_ENABLED = yaml_config.get('fetch_by_date', {}).get('enabled', False)
+FETCH_START_DATE = yaml_config.get('fetch_by_date', {}).get('start_date', "2025-01-01T00:00:00") or None
+FETCH_END_DATE = yaml_config.get('fetch_by_date', {}).get('end_date', "") or None
+FETCH_INTERVAL_HOURS = yaml_config.get('fetch_by_date', {}).get('fetch_interval_hours', 6)  # Default to 6 hours
 
-ELEMENTS_TO_PSEUDONYMIZE = {
-    element: {
-        "enabled": config.get("enabled", False),
-        "prefix": config.get("prefix", "")
-    }
-    for element, config in PSEUDONYMIZATION_SETTINGS.get('elements_to_pseudonymize', {}).items()
-}
+# Polling configuration
+POLLING_ENABLED = yaml_config.get('polling', {}).get('enabled', False)
+POLL_INTERVAL = yaml_config.get('polling', {}).get('interval_seconds', 1800)  # Default to 30 minutes
+MAX_PARALLEL_FETCHES = yaml_config.get('polling', {}).get('max_parallel_fetches', 3)
 
-# GPAS server configurations (conditionally loaded based on GPAS_ENABLED)
-GPAS_BASE_URL = os.getenv("GPAS_BASE_URL") if GPAS_ENABLED else None
-GPAS_ROOT_DOMAIN = os.getenv("GPAS_ROOT_DOMAIN") if GPAS_ENABLED else None
-GPAS_CLIENT_CERT = os.getenv("GPAS_CLIENT_CERT") if GPAS_ENABLED else None
-GPAS_CLIENT_KEY = os.getenv("GPAS_CLIENT_KEY") if GPAS_ENABLED else None
-GPAS_CA_CERT = os.getenv("GPAS_CA_CERT") if GPAS_ENABLED else None
+# Priority-based fetching
+
+fetching_config = yaml_config.get("fetching", {})
+PRIORITY_BASED_FETCHING = fetching_config.get("priority_based", False)  # Default is False
+
 
 # Database configuration
 DB_SETTINGS = yaml_config.get("database", {})
@@ -100,25 +97,78 @@ DB_USER = DB_SETTINGS.get("user", "user")
 DB_PASSWORD = DB_SETTINGS.get("password", "password")
 DB_NAME = DB_SETTINGS.get("database", "aql2fhir")
 
+# Pseudonymization configuration
+PSEUDONYMIZATION_SETTINGS = yaml_config.get('pseudonymization', {})
+PSEUDONYMIZATION_ENABLED = PSEUDONYMIZATION_SETTINGS.get('enabled', False)
+PSEUDONYMIZATION_DETERMINISTIC_AES = PSEUDONYMIZATION_SETTINGS.get('use_deterministic_aes', True)  # Default to True
+# GPAS Configuration
+GPAS_ENABLED = yaml_config.get("pseudonymization", {}).get("GPAS", False)
+
+if GPAS_ENABLED:
+    GPAS_BASE_URL = os.getenv("GPAS_BASE_URL", None)
+    GPAS_ROOT_DOMAIN = os.getenv("GPAS_ROOT_DOMAIN", None)
+    GPAS_CLIENT_CERT = os.getenv("GPAS_CLIENT_CERT", None)
+    GPAS_CLIENT_KEY = os.getenv("GPAS_CLIENT_KEY", None)
+    GPAS_CA_CERT = os.getenv("GPAS_CA_CERT", None)
+else:
+    GPAS_BASE_URL = None
+    GPAS_ROOT_DOMAIN = None
+    GPAS_CLIENT_CERT = None
+    GPAS_CLIENT_KEY = None
+    GPAS_CA_CERT = None
+
+
+ELEMENTS_TO_PSEUDONYMIZE = {
+    element: {
+        "enabled": config.get("enabled", False),
+        "prefix": config.get("prefix", "")
+    }
+    for element, config in PSEUDONYMIZATION_SETTINGS.get('elements_to_pseudonymize', {}).items()
+}
+
+# Sanitization configuration
+SANITIZE_SETTINGS = yaml_config.get('sanitize', {})
+SANITIZE_ENABLED = SANITIZE_SETTINGS.get('enabled', False)
+SANITIZE_FIELDS = SANITIZE_SETTINGS.get('elements_to_sanitize', [])
+
+# Query retries configuration
+QUERY_RETRIES_ENABLED = yaml_config.get('query_retries', {}).get('enabled', True)
+QUERY_RETRY_COUNT = yaml_config.get('query_retries', {}).get('retry_count', 3)
+QUERY_RETRY_INTERVAL = yaml_config.get('query_retries', {}).get('retry_interval_seconds', 10)
+
+# Server health check configuration
+HEALTH_CHECK_CONFIG = yaml_config.get("server_health_check", {})
+HEALTH_CHECK_ENABLED = HEALTH_CHECK_CONFIG.get("enabled", True)
+HEALTH_CHECK_RETRY_INTERVAL = HEALTH_CHECK_CONFIG.get("retry_interval_seconds", 20)
+HEALTH_CHECK_MAX_RETRIES = HEALTH_CHECK_CONFIG.get("max_retries", None)  # None means unlimited retries
+
+# Processing settings
+USE_BATCH = yaml_config.get('processing', {}).get('use_batch', False)
+BATCH_SIZE = yaml_config.get('processing', {}).get('batch_size', 100)
+
 # Resources, AQL, and mapping files
 RESOURCES = yaml_config.get('resources', [])
 RESOURCE_FILES = {
     resource['name']: {
         "mapping": os.path.join(BASE_MAPPING_DIR, resource.get('mapping_file', 'default_mapping.json')),
-        "required_fields": resource.get('required_fields', [])  # Include required_fields
+        "required_fields": resource.get('required_fields', [])
     }
     for resource in RESOURCES
 }
 
-# Date-based fetching configuration
-FETCH_BY_DATE_ENABLED = yaml_config.get('fetch_by_date', {}).get('enabled', False)
-FETCH_START_DATE = yaml_config.get('fetch_by_date', {}).get('start_date', "2025-01-01") or None
-FETCH_END_DATE = yaml_config.get('fetch_by_date', {}).get('end_date', "") or None
-
-# Polling Interval
-USE_BATCH = yaml_config.get('processing', {}).get('use_batch', False)
-BATCH_SIZE = yaml_config.get('processing', {}).get('batch_size', 1)  # Default batch size is 1 if not set
-POLLING_ENABLED = yaml_config.get('polling', {}).get('enabled', False)
-POLL_INTERVAL = yaml_config.get('polling', {}).get('interval_seconds', 60)  # Default poll interval is 60 seconds
-
 # Debugging
+if __name__ == "__main__":
+    print(f"🔍 CONFIGURATION LOADED SUCCESSFULLY")
+    print(f"🔹 EHR_AUTH_METHOD: {EHR_AUTH_METHOD}")
+    print(f"🔹 FHIR_AUTH_METHOD: {FHIR_AUTH_METHOD}")
+    print(f"🔹 DB_TYPE: {DB_TYPE}")
+    print(f"🔹 GPAS_ENABLED: {GPAS_ENABLED}")
+    print(f"🔹 FETCH_BY_DATE_ENABLED: {FETCH_BY_DATE_ENABLED}")
+    print(f"🔹 FETCH_INTERVAL_HOURS: {FETCH_INTERVAL_HOURS}")
+    print(f"🔹 POLLING_ENABLED: {POLLING_ENABLED}")
+    print(f"🔹 POLL_INTERVAL: {POLL_INTERVAL}")
+    print(f"🔹 MAX_PARALLEL_FETCHES: {MAX_PARALLEL_FETCHES}")
+    print(f"🔹 PRIORITY_BASED_FETCHING: {PRIORITY_BASED_FETCHING}")
+    print(f"🔹 QUERY_RETRIES_ENABLED: {QUERY_RETRIES_ENABLED}")
+    print(f"🔹 HEALTH_CHECK_ENABLED: {HEALTH_CHECK_ENABLED}")
+    print(f"🔹 RESOURCE_FILES: {RESOURCE_FILES}")
