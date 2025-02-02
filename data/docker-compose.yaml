@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: openehr_touch_db
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: my_touch_password
+      POSTGRES_DB: touch_db
+      PGDATA: /var/lib/postgresql/data/pgdata  # Ensure clean data storage
+    ports:
+      - "5432:5432"
+    volumes:
+      - touch_data:/var/lib/postgresql/data
+    healthcheck:  # Optional: Check if Postgres is ready
+      test: ["CMD-SHELL", "pg_isready -U admin"]
+      interval: 10s
+      retries: 5
+      timeout: 5s
+
+volumes:
+  touch_data:
+    driver: local
