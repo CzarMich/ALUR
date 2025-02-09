@@ -43,7 +43,7 @@ if isinstance(aes_key, str):
 
 
 def construct_aql_query(resource_name: str, parameters: dict) -> str:
-    """Load and construct AQL query dynamically."""
+    """Load and construct AQL query dynamically with proper placeholder replacement."""
     try:
         resource_config = load_resource_config(resource_name)
         aql_query = resource_config.get("query_template", "")
@@ -51,7 +51,7 @@ def construct_aql_query(resource_name: str, parameters: dict) -> str:
         if not aql_query:
             raise ValueError(f"Query template missing for {resource_name}")
 
-        # ✅ Replace placeholders dynamically
+        # ✅ Ensure values are properly inserted into placeholders
         for key, value in parameters.items():
             placeholder = f"{{{{{key}}}}}"
             if placeholder in aql_query:
@@ -76,78 +76,82 @@ def query_resource(resource_name: str):
     try:
         conn = get_db_connection()
 
-        # ✅ Load parameters dynamically
+        # ✅ Load resource configuration dynamically
         resource_config = load_resource_config(resource_name)
         default_parameters = resource_config.get("parameters", {})
 
-        # ✅ Fetch interval & priority-based fetching
+        # ✅ Fetch interval handling
         fetch_interval = int(FETCH_INTERVAL_HOURS) * 3600  # Convert hours to seconds
         priority_fetch_interval = int(resource_config.get("priority", 0)) * 1800  # P1=30min, P2=2h, etc.
 
         if PRIORITY_BASED_FETCHING and priority_fetch_interval > 0:
             fetch_interval = priority_fetch_interval  # Override with priority setting
 
-        # ✅ Load last_run_time
+        # ✅ Retrieve the last stored fetch timestamp (or use start date)
         last_run_time = get_last_run_time(resource_name) or FETCH_START_DATE
+
+        # ✅ Compute the new fetch timestamp
+        if FETCH_BY_DATE_ENABLED:
+            new_start_date_dt = time.strptime(last_run_time, "%Y-%m-%dT%H:%M:%S")
+            new_start_date_dt = time.mktime(new_start_date_dt) + fetch_interval  # Move forward
+            new_start_date = time.strftime("%Y-%m-%dT%H:%M:%S", time.localtime(new_start_date_dt))
+
+            # ✅ Ensure the fetch does not go beyond the end date
+            if FETCH_END_DATE and new_start_date >= FETCH_END_DATE:
+                logger.info(f"🛑 Fetch end date {FETCH_END_DATE} reached. Stopping fetch.")
+                return
+
+        else:
+            new_start_date = None  # Not needed when fetch by date is disabled
 
         # ✅ Load parameters, ensure correct types
         parameters = {
-            "last_run_time": last_run_time,
+            "last_run_time": last_run_time if FETCH_BY_DATE_ENABLED else "",
             "composition_name": default_parameters.get("composition_name", ""),
             "offset": int(default_parameters.get("offset", 0)),  # Ensure integer
+            "limit": int(default_parameters.get("limit", 100)),  # Default to 100 if missing
         }
 
-        if "limit" in default_parameters:
-            parameters["limit"] = int(default_parameters["limit"])  # Ensure integer
+        logger.info(f"🚀 Fetching {resource_name} | Last Run: {last_run_time}")
 
-        logger.info(f"🚀 Fetching {resource_name} | Interval: {fetch_interval // 60} min")
+        # ✅ Construct and execute AQL Query
+        aql_query = construct_aql_query(resource_name, parameters)
 
-        retries = 3  # ✅ Retry failed queries up to 3 times
-        for attempt in range(retries):
-            try:
-                # ✅ Construct AQL Query
-                aql_query = construct_aql_query(resource_name, parameters)
-                url = f"{EHR_SERVER_URL}/rest/v1/query"
-                query_payload = {"aql": aql_query}
+        url = f"{EHR_SERVER_URL}/rest/v1/query"
+        query_payload = {"aql": aql_query}
 
-                response = ehr_session.post(url, json=query_payload, headers={"Content-Type": "application/json"})
+        response = ehr_session.post(url, json=query_payload, headers={"Content-Type": "application/json"})
 
-                logger.debug(f"🔍 DEBUG: Response Status: {response.status_code}")
+        if response.status_code == 200:
+            result_set = response.json().get("resultSet", [])
 
-                if response.status_code == 200:
-                    result_set = response.json().get("resultSet", [])
+            if not result_set:
+                logger.info(f"✅ No new records found for {resource_name}.")
+                return
 
-                    if not result_set:
-                        logger.info(f"✅ No new records found for {resource_name}.")
-                        return
+            logger.info(f"✅ Retrieved {len(result_set)} records for {resource_name}.")
 
-                    logger.info(f"✅ Retrieved {len(result_set)} records for {resource_name}.")
+            # ✅ Ensure process_records is being called
+            process_records(records=result_set, resource_type=resource_name, key=aes_key)
 
-                    # ✅ Ensure process_records is being called
-                    process_records(records=result_set, resource_type=resource_name, key=aes_key)
+            # ✅ Update last_run_time if fetch_by_date is enabled
+            if FETCH_BY_DATE_ENABLED:
+                set_last_run_time(resource_name, new_start_date)
 
-                    # ✅ Update last_run_time
-                    new_run_time = time.strftime("%Y-%m-%dT%H:%M:%S")
-                    set_last_run_time(resource_name, new_run_time)
+        elif response.status_code == 204:
+            logger.warning(f"⚠ No data available for {resource_name}. Response 204 (No Content). Skipping.")
+            return
 
-                    break  # ✅ Exit retry loop if successful
+        else:
+            logger.warning(f"⚠ Query failed: {response.status_code} - {response.text}")
 
-                elif response.status_code == 204:  # ✅ Handle No Content
-                    logger.warning(f"⚠ No data available for {resource_name}. Response 204 (No Content). Skipping.")
-                    return
-
-                else:
-                    logger.warning(f"⚠ Query failed (attempt {attempt+1}/{retries}): {response.status_code} - {response.text}")
-                    if attempt == retries - 1:
-                        logger.error(f"🔴 Final attempt failed for {resource_name}. Skipping this fetch.")
-                    time.sleep(5)  # Wait before retrying
-
-            except requests.RequestException as e:
-                logger.error(f"❌ Request failed for {resource_name}: {e}")
-                time.sleep(5)  # Wait before retrying
+    except KeyboardInterrupt:
+        logger.info("🛑 Process interrupted by user (CTRL+C). Exiting gracefully...")
+        sys.exit(0)
 
     except Exception as e:
         logger.error(f"❌ General error occurred while querying {resource_name}: {e}", exc_info=True)
+
     finally:
         if conn:
             release_db_connection(conn)
@@ -155,28 +159,37 @@ def query_resource(resource_name: str):
 
 def query_all_resources():
     """Fetch all resources dynamically based on configuration."""
-    with ThreadPoolExecutor(max_workers=MAX_PARALLEL_FETCHES) as executor:
-        futures = {executor.submit(query_resource, resource["name"]): resource for resource in RESOURCES}
-        
-        for future in futures:
-            resource = futures[future]
-            try:
-                future.result()  # Wait for completion
-            except Exception as exc:
-                logger.error(f"⚠ Error fetching {resource['name']}: {exc}")
+    try:
+        with ThreadPoolExecutor(max_workers=MAX_PARALLEL_FETCHES) as executor:
+            futures = {executor.submit(query_resource, resource["name"]): resource for resource in RESOURCES}
 
-    # ✅ Only wait if polling is enabled
-    if POLLING_ENABLED:
-        logger.info(f"✅ Cycle complete. Waiting for {POLL_INTERVAL} seconds before the next run.")
-        time.sleep(POLL_INTERVAL)
-    else:
-        logger.info("✅ Polling is disabled. Exiting after this fetch cycle.")
-        sys.exit(0)  # ✅ Gracefully exit instead of waiting
+            for future in futures:
+                resource = futures[future]
+                try:
+                    future.result()  # Wait for completion
+                except Exception as exc:
+                    logger.error(f"⚠ Error fetching {resource['name']}: {exc}")
+
+        # ✅ Only wait if polling is enabled
+        if POLLING_ENABLED:
+            logger.info(f"✅ Cycle complete. Waiting for {POLL_INTERVAL} seconds before the next run.")
+            time.sleep(POLL_INTERVAL)
+        else:
+            logger.info("✅ Polling is disabled. Exiting after this fetch cycle.")
+            sys.exit(0)  # ✅ Gracefully exit instead of waiting
+
+    except KeyboardInterrupt:
+        logger.info("🛑 Process interrupted. Exiting...")
+        sys.exit(0)
 
 
 if __name__ == "__main__":
-    while True:
-        logger.info("🚀 Starting a new fetch-and-process cycle.")
-        query_all_resources()
-        logger.info(f"✅ Cycle complete. Waiting for {POLL_INTERVAL} seconds before the next run.")
-        time.sleep(POLL_INTERVAL)
+    try:
+        while True:
+            logger.info("🚀 Starting a new fetch-and-process cycle.")
+            query_all_resources()
+            logger.info(f"✅ Cycle complete. Waiting for {POLL_INTERVAL} seconds before the next run.")
+            time.sleep(POLL_INTERVAL)
+    except KeyboardInterrupt:
+        logger.info("🛑 Process interrupted by user. Exiting...")
+        sys.exit(0)

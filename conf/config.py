@@ -1,6 +1,7 @@
 import os
 import yaml
 from dotenv import load_dotenv
+import logging
 
 # Load environment variables from a .env file
 dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
@@ -47,6 +48,9 @@ TEMP_FOLDER = os.path.join(BASE_DIR, yaml_config.get('paths', {}).get('temp_fold
 DB_FILE = os.path.join(BASE_DIR, yaml_config.get('paths', {}).get('db_file', 'data.db'))
 LOG_FOLDER = os.path.join(BASE_DIR, yaml_config.get('paths', {}).get('log_folder', 'logs'))
 
+# Ensure log folder exists
+os.makedirs(LOG_FOLDER, exist_ok=True)
+
 # Ensure DB_FILE has the correct extension
 if not DB_FILE.endswith(".db"):
     DB_FILE += ".db"
@@ -89,13 +93,22 @@ PRIORITY_BASED_FETCHING = fetching_config.get("priority_based", False)  # Defaul
 
 
 # Database configuration
+# Database configuration
 DB_SETTINGS = yaml_config.get("database", {})
-DB_TYPE = DB_SETTINGS.get("name", "sqlite").strip().lower()
-DB_HOST = DB_SETTINGS.get("host", "localhost")
-DB_PORT = DB_SETTINGS.get("port", 5432)
-DB_USER = DB_SETTINGS.get("user", "user")
-DB_PASSWORD = DB_SETTINGS.get("password", "password")
-DB_NAME = DB_SETTINGS.get("database", "aql2fhir")
+DB_TYPE = os.getenv("DB_TYPE", "postgres").strip().lower()  # ✅ Default to PostgreSQL
+DB_HOST = os.getenv("DB_HOST", "192.168.2.32")
+DB_PORT = int(os.getenv("DB_PORT", 5432))  # ✅ Ensure integer conversion
+DB_NAME = os.getenv("DB_NAME", "touch")
+DB_USER = os.getenv("DB_USER", "touch")
+DB_PASSWORD = os.getenv("DB_PASSWORD", "your_secure_password")
+
+if DB_TYPE not in ["postgres", "mysql"]:
+    raise ValueError(f"🔴 ERROR: Unsupported database type: {DB_TYPE}")
+
+# Log database type
+logger = logging.getLogger(__name__)
+logger.info(f"📢 Using {DB_TYPE.upper()} as database backend")
+
 
 # Pseudonymization configuration
 PSEUDONYMIZATION_SETTINGS = yaml_config.get('pseudonymization', {})
@@ -146,29 +159,99 @@ HEALTH_CHECK_MAX_RETRIES = HEALTH_CHECK_CONFIG.get("max_retries", None)  # None 
 USE_BATCH = yaml_config.get('processing', {}).get('use_batch', False)
 BATCH_SIZE = yaml_config.get('processing', {}).get('batch_size', 100)
 
-# Resources, AQL, and mapping files
-RESOURCES = yaml_config.get('resources', [])
-RESOURCE_FILES = {
-    resource['name']: {
-        "mapping": os.path.join(BASE_MAPPING_DIR, resource.get('mapping_file', 'default_mapping.json')),
-        "required_fields": resource.get('required_fields', [])
-    }
-    for resource in RESOURCES
-}
+# ✅ NEW: Load MAX_FHIR_WORKERS from settings.yml
+MAX_FHIR_WORKERS = yaml_config.get('processing', {}).get('max_fhir_workers', 5)
 
-# Debugging
+# Resources, AQL, and mapping files
+def load_mapping_file(mapping_path):
+    """Load mappings from a YAML file."""
+    try:
+        if mapping_path and os.path.exists(mapping_path):
+            #print(f"✅ Found mapping file: {mapping_path}")  # Debugging
+            with open(mapping_path, 'r') as file:
+                mapping_data = yaml.safe_load(file)
+             #   print(f"✅ Loaded mappings from {mapping_path}")  # Debugging
+                return mapping_data
+        else:
+            print(f"❌ ERROR: Mapping file not found: {mapping_path}")
+            return {}
+    except yaml.YAMLError as e:
+        raise Exception(f"❌ ERROR: Failed to parse mapping file {mapping_path}: {e}")
+
+# ✅ Use BASE_MAPPING_DIR for mapping file paths
+RESOURCES = []
+RESOURCE_FILES = {}
+
+for resource in yaml_config.get("resources", []):
+    resource_name = resource["name"]  # ✅ Get dynamic resource name
+    mapping_file = resource.get("mapping_file")
+    mapping_path = os.path.join(BASE_MAPPING_DIR, mapping_file) if mapping_file else None  # ✅ Dynamic path
+
+    # ✅ Load mappings dynamically for the current resource
+    mappings = load_mapping_file(mapping_path).get(resource_name, {}).get("mappings", {}) if mapping_path else {}
+
+    # Debugging to ensure mappings are loaded correctly
+    print(f"🔍 Processing resource: {resource_name}")
+    #print(f"📂 Using mapping file: {mapping_path}")
+    #print(f"🔄 Mappings Loaded: {mappings}")
+
+    # ✅ Add dynamically loaded mappings to RESOURCES
+    resource_entry = {
+        "name": resource_name,
+        "priority": resource.get("priority", 1),
+        "aql_file": resource.get("aql_file"),
+        "required_fields": resource.get("required_fields", []),
+        "mapper_module": resource.get("mapper_module"),
+        "mapper_function": resource.get("mapper_function"),
+        "mappings": mappings  # ✅ Now dynamically loads correct mappings
+    }
+    RESOURCES.append(resource_entry)
+
+    # ✅ Add to RESOURCE_FILES for other usages
+    RESOURCE_FILES[resource_name] = {
+        "mapping_path": mapping_path,
+        "mappings": mappings,
+        "required_fields": resource.get("required_fields", [])
+    }
+
+# Load Logging Settings
+# Logging settings
+LOG_SETTINGS = yaml_config.get('logging', {})
+LOG_LEVEL = LOG_SETTINGS.get('level', 'INFO').upper()
+ENABLE_CONSOLE_LOG = LOG_SETTINGS.get('enable_console', True)
+ENABLE_FILE_LOG = LOG_SETTINGS.get('enable_file', True)
+
+
+# Set up logging configuration
+log_handlers = []
+
+# Console Logger
+if ENABLE_CONSOLE_LOG:
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(getattr(logging, LOG_LEVEL, logging.INFO))
+    log_handlers.append(console_handler)
+
+# File Logger
+if ENABLE_FILE_LOG:
+    log_file_path = os.path.join(LOG_FOLDER, 'application.log')  # ✅ Now using `LOG_FOLDER`
+    file_handler = logging.FileHandler(log_file_path)
+    file_handler.setLevel(getattr(logging, LOG_LEVEL, logging.INFO))
+    log_handlers.append(file_handler)
+
+# Apply logging configuration
+logging.basicConfig(
+    level=getattr(logging, LOG_LEVEL, logging.INFO),
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    handlers=log_handlers
+)
+
+
+logger = logging.getLogger(__name__)
+logger.info(f"📢 Logging initialized at {LOG_LEVEL} level.")  # Removed log folder path
+
+
+
+# Debugging output
 if __name__ == "__main__":
-    print(f"🔍 CONFIGURATION LOADED SUCCESSFULLY")
-    print(f"🔹 EHR_AUTH_METHOD: {EHR_AUTH_METHOD}")
-    print(f"🔹 FHIR_AUTH_METHOD: {FHIR_AUTH_METHOD}")
-    print(f"🔹 DB_TYPE: {DB_TYPE}")
-    print(f"🔹 GPAS_ENABLED: {GPAS_ENABLED}")
-    print(f"🔹 FETCH_BY_DATE_ENABLED: {FETCH_BY_DATE_ENABLED}")
-    print(f"🔹 FETCH_INTERVAL_HOURS: {FETCH_INTERVAL_HOURS}")
-    print(f"🔹 POLLING_ENABLED: {POLLING_ENABLED}")
-    print(f"🔹 POLL_INTERVAL: {POLL_INTERVAL}")
-    print(f"🔹 MAX_PARALLEL_FETCHES: {MAX_PARALLEL_FETCHES}")
-    print(f"🔹 PRIORITY_BASED_FETCHING: {PRIORITY_BASED_FETCHING}")
-    print(f"🔹 QUERY_RETRIES_ENABLED: {QUERY_RETRIES_ENABLED}")
-    print(f"🔹 HEALTH_CHECK_ENABLED: {HEALTH_CHECK_ENABLED}")
-    print(f"🔹 RESOURCE_FILES: {RESOURCE_FILES}")
+    #print(f"✅ RESOURCES Loaded: {RESOURCES}")
+    print(f"✅ RESOURCE_FILES Loaded: {RESOURCE_FILES}") 

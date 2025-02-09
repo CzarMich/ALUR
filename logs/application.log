@@ -1,0 +1,1396 @@
+2025-02-02 02:59:39,801 - INFO - 📢 Logging initialized at INFO level.
+2025-02-02 02:59:39,814 - INFO - Clearing all items from the cache
+2025-02-02 02:59:39,869 - INFO - ✅ Connected to SQLite database.
+2025-02-02 02:59:39,869 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 02:59:39,870 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 02:59:39,870 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 02:59:39,889 - INFO - Generated FHIR resource: {'resourceType': 'Condition', 'id': 'EHRID-d2c8d821409fb86c', 'text': {'status': 'generated', 'div': "<div xmlns='http://www.w3.org/1999/xhtml'>  No additional notes available.  </div>"}, 'identifier': [{'value': 'EHRID-d2c8d821409fb86c'}], 'meta': {'profile': ['https://www.medizininformatik-initiative.de/fhir/core/modul-diagnose/StructureDefinition/Diagnose']}, 'status': 'active', 'category': {'coding': [{'system': 'http://terminology.hl7.org/CodeSystem/condition-category', 'code': 'EL', 'display': 'Entlassdiagnose'}]}, 'code': {'coding': [{'system': 'http://fhir.de/CodeSystem/bfarm/icd-10-gm|2023', 'code': 'I25.13', 'display': 'Drei-Gefäß-Erkrankung', 'extensions': [{'url': 'http://fhir.de/StructureDefinition/icd-10-gm-manifestationscode', 'valueCoding': {'system': 'http://fhir.de/CodeSystem/icd-10-gm-manifestationscode'}}, {'url': 'http://fhir.de/StructureDefinition/icd-10-gm-diagnosesicherheit', 'valueCoding': {'system': 'https://fhir.kbv.de/CodeSystem/KBV_CS_SFHIR_ICD_DIAGNOSESICHERHEIT', 'code': 'Condition_verificationStatus_Code', 'display': 'Condition_verificationStatus'}}]}]}, 'subject': {'reference': 'Patient/PID_7e22d1511bcfa978', 'identifier': {'value': 'PID_7e22d1511bcfa978', 'system': 'http://USKH/Pseudonymised_ID'}}, 'encounter': {'reference': 'Encounter/FALLID_3f0bd3988ef53673', 'identifier': {'value': 'FALLID_3f0bd3988ef53673', 'system': 'http://USKH/Encounter_ID'}}, 'recordedDate': '2023-02-08T15:21:00.000'}
+2025-02-02 02:59:39,902 - WARNING - ⚠ Connection failed: HTTPConnectionPool(host='localhost', port=8080): Max retries exceeded with url: /fhir/Condition?identifier=EHRID-d2c8d821409fb86c (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x10694cd00>: Failed to establish a new connection: [Errno 61] Connection refused')). Retrying in 10s...
+2025-02-02 02:59:49,915 - WARNING - ⚠ Connection failed: HTTPConnectionPool(host='localhost', port=8080): Max retries exceeded with url: /fhir/Condition?identifier=EHRID-d2c8d821409fb86c (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x106984d60>: Failed to establish a new connection: [Errno 61] Connection refused')). Retrying in 10s...
+2025-02-02 03:04:42,140 - INFO - 📢 Logging initialized at INFO level.
+2025-02-02 03:04:42,150 - INFO - Clearing all items from the cache
+2025-02-02 03:04:42,217 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:04:42,217 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:04:42,217 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:04:42,218 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:04:42,253 - WARNING - ⚠ Connection failed: HTTPConnectionPool(host='localhost', port=8080): Max retries exceeded with url: /fhir/Condition?identifier=EHRID-d2c8d821409fb86c (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x1091bdee0>: Failed to establish a new connection: [Errno 61] Connection refused')). Retrying in 10s...
+2025-02-02 03:04:52,265 - WARNING - ⚠ Connection failed: HTTPConnectionPool(host='localhost', port=8080): Max retries exceeded with url: /fhir/Condition?identifier=EHRID-d2c8d821409fb86c (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x1091bde80>: Failed to establish a new connection: [Errno 61] Connection refused')). Retrying in 10s...
+2025-02-02 03:05:02,274 - WARNING - ⚠ Connection failed: HTTPConnectionPool(host='localhost', port=8080): Max retries exceeded with url: /fhir/Condition?identifier=EHRID-d2c8d821409fb86c (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x1091bd160>: Failed to establish a new connection: [Errno 61] Connection refused')). Retrying in 10s...
+2025-02-02 03:06:48,782 - INFO - 📢 Logging initialized at INFO level.
+2025-02-02 03:07:02,641 - INFO - 📢 Logging initialized at INFO level.
+2025-02-02 03:07:35,267 - INFO - 📢 Logging initialized at INFO level.
+2025-02-02 03:08:38,578 - INFO - 📢 Logging initialized at INFO level.
+2025-02-02 03:09:51,923 - INFO - 📢 Logging initialized at INFO level.
+2025-02-02 03:09:51,928 - INFO - Clearing all items from the cache
+2025-02-02 03:10:16,812 - INFO - 📢 Logging initialized at INFO level.
+2025-02-02 03:10:16,819 - INFO - Clearing all items from the cache
+2025-02-02 03:10:16,829 - INFO - 🚀 Starting FHIR processing loop...
+2025-02-02 03:10:16,829 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:10:16,829 - ERROR - ❌ General error during FHIR processing: no such table: fhir_queue
+2025-02-02 03:10:26,833 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:10:26,834 - ERROR - ❌ General error during FHIR processing: no such table: fhir_queue
+2025-02-02 03:10:36,839 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:10:36,841 - ERROR - ❌ General error during FHIR processing: no such table: fhir_queue
+2025-02-02 03:13:08,106 - INFO - 📢 Logging initialized at INFO level.
+2025-02-02 03:13:12,632 - INFO - 📢 Logging initialized at INFO level.
+2025-02-02 03:13:12,637 - INFO - Clearing all items from the cache
+2025-02-02 03:13:12,649 - INFO - 🚀 Starting FHIR resource processing loop...
+2025-02-02 03:13:12,649 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:13:12,649 - ERROR - ❌ General error occurred during FHIR processing: no such table: fhir_queue
+2025-02-02 03:13:22,651 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:13:22,653 - ERROR - ❌ General error occurred during FHIR processing: no such table: fhir_queue
+2025-02-02 03:29:09,058 - INFO - 📢 Logging initialized at INFO level.
+2025-02-02 03:32:51,652 - INFO - 📢 Logging initialized at INFO level.
+2025-02-02 03:40:31,645 - INFO - 📢 Logging initialized at INFO level.
+2025-02-02 03:40:31,703 - INFO - Clearing all items from the cache
+2025-02-02 03:40:31,719 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:31,721 - INFO - ✅ Ensured fhir_queue table exists.
+2025-02-02 03:40:31,722 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:31,722 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:31,723 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:31,723 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:31,723 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:31,741 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:31,743 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:31,743 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:31,743 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:31,744 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:31,744 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:31,744 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:31,744 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:31,761 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:31,762 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:31,763 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:31,763 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:31,763 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:31,763 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:31,763 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:31,763 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:31,779 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:31,781 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:31,781 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:31,782 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:31,782 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:31,782 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:31,783 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:31,783 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:31,801 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:31,803 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:31,803 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:31,803 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:31,803 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:31,804 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:31,804 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:31,804 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:31,819 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:31,821 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:31,821 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:31,821 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:31,822 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:31,822 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:31,823 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:31,823 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:31,840 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:31,841 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:31,842 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:31,842 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:31,842 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:31,842 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:31,843 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:31,843 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:31,859 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:31,861 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:31,861 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:31,861 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:31,861 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:31,862 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:31,862 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:31,862 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:31,879 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:31,881 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:31,882 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:31,882 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:31,882 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:31,882 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:31,883 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:31,883 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:31,899 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:31,901 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:31,901 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:31,901 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:31,901 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:31,902 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:31,902 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:31,902 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:31,918 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:31,920 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:31,920 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:31,920 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:31,921 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:31,921 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:31,921 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:31,921 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:31,936 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:31,938 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:31,938 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:31,938 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:31,939 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:31,939 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:31,939 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:31,940 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:31,956 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:31,958 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:31,958 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:31,958 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:31,958 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:31,959 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:31,959 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:31,959 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:31,976 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:31,977 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:31,977 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:31,977 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:31,978 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:31,978 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:31,978 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:31,978 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:31,995 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:31,998 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:31,998 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:31,998 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:31,998 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:31,999 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:31,999 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:31,999 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:32,015 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,016 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:32,017 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,017 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:32,017 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,017 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:32,018 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,018 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:32,034 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,036 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:32,036 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,036 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:32,036 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,037 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:32,037 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,037 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:32,052 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,054 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:32,054 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,054 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:32,055 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,055 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:32,056 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,056 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:32,071 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,073 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:32,073 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,073 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:32,073 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,074 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:32,074 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,074 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:32,091 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,092 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:32,093 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,093 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:32,093 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,093 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:32,094 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,094 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:32,110 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,112 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:32,112 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,112 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:32,112 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,112 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:32,113 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,113 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:32,129 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,131 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:32,131 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,132 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:32,132 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,132 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:32,132 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,132 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:32,149 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,151 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:32,151 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,151 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:32,151 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,152 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:32,152 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,152 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:32,168 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,170 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:32,170 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,170 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:32,171 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,171 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:32,171 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,171 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:32,187 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,188 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:32,189 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,189 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:32,189 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,190 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:32,190 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,190 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:32,208 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,209 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:32,209 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,209 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:32,210 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,210 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:32,210 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,210 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:32,231 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,233 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:32,233 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,234 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:32,234 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,235 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:32,235 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,235 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:32,255 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,257 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:32,257 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,257 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:32,258 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,258 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:32,258 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,259 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:32,279 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,281 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:32,281 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,281 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:32,282 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,282 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:32,283 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,283 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:32,302 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,303 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:32,304 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,304 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:32,304 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,304 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:32,305 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,305 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:32,326 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,327 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:32,328 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,328 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:32,328 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,328 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:32,328 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,328 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:32,348 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,350 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:32,350 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,350 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:32,351 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,351 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:32,351 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,351 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:32,368 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,369 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:32,370 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,370 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:32,370 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,370 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:32,371 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,371 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:32,387 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,389 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:32,389 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,389 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:32,390 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,390 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:32,390 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,390 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:32,410 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,411 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:32,412 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,412 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:32,412 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,412 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:32,413 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,413 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:32,429 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,431 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:32,431 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,431 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:32,431 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,432 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:32,432 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,432 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:32,449 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,451 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:32,451 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,451 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:32,451 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,452 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:32,452 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,452 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:32,468 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,470 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:32,470 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,470 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:32,470 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,471 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:32,471 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,471 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:32,486 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,488 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:32,488 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,488 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:32,488 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,489 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:32,489 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,489 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:32,504 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,506 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:32,506 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,506 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:32,507 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,507 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:32,507 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,507 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:32,523 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,525 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:32,525 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,525 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:32,525 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,526 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:32,526 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,526 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:32,542 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,544 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:32,544 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,544 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:32,545 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,545 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:32,545 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,545 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:32,561 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,563 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:32,563 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,563 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:32,563 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,564 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:32,564 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,564 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:32,580 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,582 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:32,583 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,583 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:32,583 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,583 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:32,583 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,584 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:32,600 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,601 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:32,602 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,602 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:32,602 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,602 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:32,603 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,603 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:32,618 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,620 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:32,620 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,620 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:32,621 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,621 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:32,621 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,621 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:32,636 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,638 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:32,639 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,639 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:32,639 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,640 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:32,640 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,640 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:32,656 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,658 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:32,658 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,658 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:32,659 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,659 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:32,659 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,659 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:32,676 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,678 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:32,678 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,678 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:32,678 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,679 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:32,679 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,679 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:32,694 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,695 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:32,695 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,696 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:32,696 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,697 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:32,697 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,697 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:32,713 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,715 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:32,715 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,715 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:32,715 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,716 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:32,716 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,716 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:32,734 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,735 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:32,736 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,736 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:32,736 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,737 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:32,737 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,737 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:32,755 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,757 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:32,757 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,757 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:32,757 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,758 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:32,758 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,758 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:32,773 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,775 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:32,775 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,775 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:32,776 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,776 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:32,776 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,776 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:32,793 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,795 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:32,795 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,795 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:32,795 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,796 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:32,796 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,796 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:32,812 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,814 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:32,814 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,814 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:32,814 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,815 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:32,815 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,815 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:32,830 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,832 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:32,833 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,833 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:32,833 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,833 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:32,834 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,834 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:32,851 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,853 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:32,853 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,854 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:32,854 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,854 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:32,854 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,854 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:32,870 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,872 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:32,872 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,872 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:32,873 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,873 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:32,874 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,874 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:32,889 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,891 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:32,891 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,891 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:32,891 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,892 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:32,892 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,892 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:32,908 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,910 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:32,910 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,910 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:32,911 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,911 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:32,912 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,912 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:32,927 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,928 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:32,928 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,928 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:32,929 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,929 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:32,929 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,930 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:32,948 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,949 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:32,950 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,950 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:32,950 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,950 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:32,950 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,950 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:32,974 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,976 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:32,977 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,977 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:32,977 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,977 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:32,977 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,978 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:32,994 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,996 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:32,996 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,996 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:32,997 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:32,997 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:32,997 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:32,997 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:33,013 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,015 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:33,015 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,015 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:33,015 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,016 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:33,016 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,016 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:33,033 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,035 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:33,035 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,035 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:33,036 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,036 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:33,036 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,036 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:33,053 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,054 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:33,054 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,054 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:33,055 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,055 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:33,055 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,056 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:33,071 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,072 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:33,073 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,073 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:33,073 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,074 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:33,074 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,074 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:33,089 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,091 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:33,091 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,092 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:33,092 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,092 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:33,092 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,092 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:33,109 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,111 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:33,111 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,112 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:33,112 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,112 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:33,112 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,112 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:33,129 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,131 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:33,131 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,131 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:33,131 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,131 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:33,132 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,132 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:33,147 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,150 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:33,150 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,150 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:33,150 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,151 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:33,151 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,151 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:33,167 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,168 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:33,168 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,168 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:33,169 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,169 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:33,169 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,170 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:33,185 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,187 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:33,187 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,187 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:33,187 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,188 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:33,188 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,188 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:33,202 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,204 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:33,204 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,204 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:33,204 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,205 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:33,205 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,205 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:33,221 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,223 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:33,223 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,223 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:33,223 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,224 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:33,224 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,224 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:33,240 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,241 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:33,241 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,241 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:33,242 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,242 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:33,242 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,243 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:33,258 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,261 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:33,261 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,261 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:33,261 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,262 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:33,262 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,262 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:33,278 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,280 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:33,280 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,280 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:33,280 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,281 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:33,281 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,281 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:33,297 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,299 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:33,299 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,299 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:33,300 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,300 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:33,300 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,300 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:33,316 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,317 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:33,317 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,318 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:33,318 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,318 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:33,318 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,319 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:33,334 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,336 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:33,336 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,336 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:33,336 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,337 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:33,337 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,337 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:33,352 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,354 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:33,354 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,354 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:33,354 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,355 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:33,355 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,355 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:33,370 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,372 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:33,372 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,372 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:33,372 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,373 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:33,373 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,373 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:33,388 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,390 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:33,390 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,390 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:33,390 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,391 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:33,391 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,391 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:33,407 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,408 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:33,408 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,408 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:33,409 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,409 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:33,410 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,410 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:33,425 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,427 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:33,427 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,427 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:33,428 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,428 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:33,428 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,428 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:33,444 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,446 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:33,446 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,446 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:33,446 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,447 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:33,447 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,447 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:33,463 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,464 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:33,464 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,465 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:33,465 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,465 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:33,465 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,466 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:33,482 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,483 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:33,483 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,483 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:33,484 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,484 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:33,484 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,484 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:33,500 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,502 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:33,502 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,502 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:33,503 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,503 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:33,503 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,503 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:33,518 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,520 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:33,520 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,520 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:33,520 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,521 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:33,521 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,521 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:33,537 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,538 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:33,539 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,539 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:33,539 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,540 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:33,540 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,540 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:33,555 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,557 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:33,557 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,557 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:33,557 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,558 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:33,558 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,558 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:33,574 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,575 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:33,575 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,576 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:33,576 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,577 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:33,577 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,577 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:33,592 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,594 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:33,594 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,595 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:33,595 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,595 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:33,595 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,596 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:33,611 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,612 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:33,613 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,613 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:33,613 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,614 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:33,614 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,614 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:33,630 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,631 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:33,632 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,632 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:33,632 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,632 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:33,632 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,632 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:33,648 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,649 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:33,650 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,650 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:33,650 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,650 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:33,650 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,651 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:33,667 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,668 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:33,669 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,669 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:33,669 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,669 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:33,670 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,670 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:33,686 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,688 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:33,688 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,688 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:33,688 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,689 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:33,689 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,689 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:33,703 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,705 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:33,705 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,705 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:33,706 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,706 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:33,707 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,707 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:33,722 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,723 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:33,724 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,724 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:33,724 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,724 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:33,725 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,725 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:33,741 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,742 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:33,742 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,742 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:33,743 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,743 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:33,743 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,744 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:33,759 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,761 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:33,761 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,761 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:33,762 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,762 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:33,762 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,762 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:33,778 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,780 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:33,780 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,780 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:33,780 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,781 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:33,781 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,781 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:33,799 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,801 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:33,801 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,801 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:33,801 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,801 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:33,802 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,802 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:33,817 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,819 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:33,819 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,819 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:33,820 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,820 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:33,820 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,821 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:33,835 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,837 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:33,837 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,838 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:33,838 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,838 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:33,838 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,838 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:33,853 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,855 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:33,855 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,855 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:33,856 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,856 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:33,856 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,857 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:33,872 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,874 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:33,874 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,874 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:33,874 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,875 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:33,875 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,875 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:33,891 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,892 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:33,892 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,892 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:33,893 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,893 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:33,893 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,894 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:33,908 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,910 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:33,910 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,910 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:33,911 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,911 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:33,911 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,911 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:33,926 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,928 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:33,928 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,928 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:33,928 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,929 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:33,929 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,929 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:33,946 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,947 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:33,948 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,948 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:33,948 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,948 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:33,949 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,949 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:33,964 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,966 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:33,966 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,966 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:33,966 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,967 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:33,967 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,967 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:33,984 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,986 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:33,986 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,986 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:33,987 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:33,987 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:33,987 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:33,988 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:34,009 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,011 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:34,012 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,012 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:34,012 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,012 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:34,012 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,012 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:34,032 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,034 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:34,034 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,034 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:34,034 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,035 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:34,035 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,035 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:34,058 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,060 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:34,060 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,060 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:34,060 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,061 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:34,061 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,061 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:34,151 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,153 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:34,154 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,154 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:34,154 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,155 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:34,155 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,155 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:34,197 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,199 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:34,199 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,199 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:34,199 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,200 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:34,200 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,200 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:34,216 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,218 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:34,218 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,219 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:34,219 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,219 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:34,219 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,220 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:34,240 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,242 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:34,242 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,242 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:34,243 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,243 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:34,243 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,243 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:34,261 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,263 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:34,263 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,263 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:34,263 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,263 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:34,264 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,264 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:34,282 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,283 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:34,283 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,283 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:34,284 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,284 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:34,284 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,284 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:34,300 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,302 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:34,302 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,302 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:34,303 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,303 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:34,303 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,303 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:34,320 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,322 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:34,322 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,322 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:34,322 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,323 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:34,323 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,323 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:34,338 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,339 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:34,340 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,340 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:34,340 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,341 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:34,341 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,341 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:34,358 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,360 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:34,360 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,360 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:34,361 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,361 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:34,361 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,361 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:34,376 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,378 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:34,378 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,378 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:34,378 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,379 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:34,379 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,379 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:34,395 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,397 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:34,397 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,397 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:34,398 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,398 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:34,398 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,398 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:34,414 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,415 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:34,416 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,416 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:34,416 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,416 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:34,416 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,417 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:34,432 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,434 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:34,434 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,434 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:34,434 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,435 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:34,435 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,435 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:34,450 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,452 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:34,452 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,452 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:34,453 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,453 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:34,453 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,453 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:34,469 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,470 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:34,470 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,470 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:34,471 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,471 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:34,471 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,471 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:34,487 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,489 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:34,489 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,489 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:34,489 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,490 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:34,490 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,490 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:34,506 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,508 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:34,508 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,508 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:34,508 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,509 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:34,509 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,509 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:34,524 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,526 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:34,526 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,526 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:34,527 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,527 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:34,527 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,528 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:34,543 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,545 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:34,545 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,545 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:34,546 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,546 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:34,546 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,546 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:34,562 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,564 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:34,564 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,564 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:34,564 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,565 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:34,565 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,565 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:34,581 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,583 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:34,583 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,583 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:34,583 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,584 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:34,584 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,584 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:34,600 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,601 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:34,602 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,602 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:34,602 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,602 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:34,602 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,603 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:34,618 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,620 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:34,620 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,620 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:34,620 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,621 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:34,621 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,621 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:34,636 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,638 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:34,638 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,638 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:34,638 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,639 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:34,639 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,639 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:34,654 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,656 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:34,657 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,657 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:34,657 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,658 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:34,658 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,658 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:34,673 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,674 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:34,674 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,675 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:34,675 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,675 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:34,675 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,675 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:34,692 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,695 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:34,695 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,695 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:34,695 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,696 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:34,696 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,696 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:34,711 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,713 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:34,713 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,713 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:34,714 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,714 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:34,714 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,714 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:34,730 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,732 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:34,732 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,732 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:34,732 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,733 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:34,733 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,733 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:34,749 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,750 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:34,750 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,751 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:34,751 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,751 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:34,751 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,752 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:34,767 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,769 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:34,769 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,769 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:34,770 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,770 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:34,770 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,770 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:34,786 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,787 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:34,788 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,788 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:34,788 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,789 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:34,789 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,789 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:40:34,805 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,807 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:40:34,807 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,807 - INFO - ✅ Queued resource Condition/EHRID-d2c8d821409fb86c for FHIR processing.
+2025-02-02 03:40:34,808 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:40:34,808 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:40:34,808 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:40:34,808 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:44:00,481 - INFO - 📢 Logging initialized at INFO level.
+2025-02-02 03:45:36,458 - INFO - 📢 Logging initialized at INFO level.
+2025-02-02 03:45:36,502 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:45:36,503 - INFO - ✅ 10 unprocessed rows found in 'condition'.
+2025-02-02 03:45:36,503 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:45:36,503 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:45:36,520 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:45:36,522 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:45:36,523 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:45:36,523 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:45:36,525 - INFO - ✅ Marked row ID 1 as processed in 'condition'.
+2025-02-02 03:45:36,525 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:45:36,525 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:45:36,526 - INFO - ✅ 9 unprocessed rows found in 'condition'.
+2025-02-02 03:45:36,526 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:45:36,526 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:45:36,543 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:45:36,545 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:45:36,545 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:45:36,545 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:45:36,547 - INFO - ✅ Marked row ID 2 as processed in 'condition'.
+2025-02-02 03:45:36,547 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:45:36,548 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:45:36,548 - INFO - ✅ 8 unprocessed rows found in 'condition'.
+2025-02-02 03:45:36,549 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:45:36,549 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:45:36,565 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:45:36,567 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:45:36,567 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:45:36,568 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:45:36,569 - INFO - ✅ Marked row ID 3 as processed in 'condition'.
+2025-02-02 03:45:36,569 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:45:36,569 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:45:36,570 - INFO - ✅ 7 unprocessed rows found in 'condition'.
+2025-02-02 03:45:36,570 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:45:36,570 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:45:36,586 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:45:36,588 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:45:36,589 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:45:36,589 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:45:36,590 - INFO - ✅ Marked row ID 4 as processed in 'condition'.
+2025-02-02 03:45:36,590 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:45:36,590 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:45:36,591 - INFO - ✅ 6 unprocessed rows found in 'condition'.
+2025-02-02 03:45:36,591 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:45:36,591 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:45:36,608 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:45:36,610 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:45:36,610 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:45:36,611 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:45:36,612 - INFO - ✅ Marked row ID 5 as processed in 'condition'.
+2025-02-02 03:45:36,612 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:45:36,613 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:45:36,613 - INFO - ✅ 5 unprocessed rows found in 'condition'.
+2025-02-02 03:45:36,613 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:45:36,614 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:45:36,631 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:45:36,633 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:45:36,633 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:45:36,633 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:45:36,635 - INFO - ✅ Marked row ID 6 as processed in 'condition'.
+2025-02-02 03:45:36,635 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:45:36,635 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:45:36,636 - INFO - ✅ 4 unprocessed rows found in 'condition'.
+2025-02-02 03:45:36,636 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:45:36,636 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:45:36,652 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:45:36,654 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:45:36,655 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:45:36,655 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:45:36,656 - INFO - ✅ Marked row ID 7 as processed in 'condition'.
+2025-02-02 03:45:36,656 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:45:36,657 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:45:36,657 - INFO - ✅ 3 unprocessed rows found in 'condition'.
+2025-02-02 03:45:36,657 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:45:36,657 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:45:36,673 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:45:36,675 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:45:36,675 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:45:36,676 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:45:36,677 - INFO - ✅ Marked row ID 8 as processed in 'condition'.
+2025-02-02 03:45:36,677 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:45:36,678 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:45:36,678 - INFO - ✅ 2 unprocessed rows found in 'condition'.
+2025-02-02 03:45:36,678 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:45:36,678 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:45:36,696 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:45:36,698 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:45:36,698 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:45:36,699 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:45:36,700 - INFO - ✅ Marked row ID 9 as processed in 'condition'.
+2025-02-02 03:45:36,700 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:45:36,701 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:45:36,701 - INFO - ✅ 1 unprocessed rows found in 'condition'.
+2025-02-02 03:45:36,701 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:45:36,701 - INFO - 🚀 Mapping resource with provided mappings.
+2025-02-02 03:45:36,718 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:45:36,719 - INFO - 📥 Inserted Condition/EHRID-d2c8d821409fb86c into fhir_queue.
+2025-02-02 03:45:36,720 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:45:36,720 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:45:36,721 - INFO - ✅ Marked row ID 10 as processed in 'condition'.
+2025-02-02 03:45:36,722 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:45:36,722 - INFO - ✅ Connected to SQLite database.
+2025-02-02 03:45:36,722 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 03:45:36,723 - INFO - 🛑 No unprocessed rows for 'Condition'. Sleeping for 1800 seconds.
+2025-02-02 09:50:51,875 - INFO - ✅ Connected to SQLite database.
+2025-02-02 09:50:51,906 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 09:50:51,909 - INFO - 🛑 No unprocessed rows for 'Condition'. Sleeping for 1800 seconds.
+2025-02-02 10:37:31,023 - INFO - 📢 Logging initialized at INFO level.
+2025-02-02 10:37:31,066 - INFO - ✅ Connected to SQLite database.
+2025-02-02 10:37:31,066 - INFO - ✅ Closed SQLite database connection.
+2025-02-02 10:37:31,066 - INFO - 🛑 No unprocessed rows for 'Condition'. Sleeping for 1800 seconds.

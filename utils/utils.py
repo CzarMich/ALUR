@@ -80,7 +80,7 @@ def load_resource_config(resource_name):
     if resource_name not in RESOURCE_FILES:
         raise ValueError(f"No configuration found for resource: {resource_name}")
 
-    mapping_file = RESOURCE_FILES[resource_name]['mapping']
+    mapping_file = RESOURCE_FILES[resource_name]['mapping_path']
 
     if not os.path.exists(mapping_file):
         raise FileNotFoundError(f"Mapping file for resource '{resource_name}' not found: {mapping_file}")

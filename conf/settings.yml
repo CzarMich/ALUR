@@ -6,18 +6,18 @@ resources:
     aql_file: condition.yml
     mapping_file: condition.yml
     required_fields:
-      - subjectID
+      - subject_id
     mapper_module: fhir_mapping.condition_mapper
     mapper_function: map_condition
 
 fetch_by_date:
-  enabled: false  # Enable or disable fetching by date
-  start_date: "2025-01-29T00:00:00"
-  end_date: ""  # Leave empty for open-ended fetch
-  fetch_interval_hours: 6  # ✅ Set fetch frequency in hours (e.g., 6 hours)
+  enabled: true  # Enable or disable fetching by date
+  start_date: "2024-05-29T00:00:00"
+  end_date: "2024-08-02T00:00:00"  # Leave empty for open-ended fetch
+  fetch_interval_hours: 1  # ✅ Set fetch frequency in hours (e.g., 6 hours)
 
 polling:
-  enabled: false  # ✅ Enable global polling
+  enabled: true  # ✅ Enable global polling
   interval_seconds: 1800  # ✅ Global polling every 30 minutes (1800 seconds)
   max_parallel_fetches: 3  # ✅ Limit concurrent fetches
 
@@ -44,10 +44,10 @@ pseudonymization:
   enabled: true  # Global switch to enable or disable pseudonymization
   use_deterministic_aes: true  # ✅ NEW: Use deterministic encryption if True
   elements_to_pseudonymize:
-    Composition_ID: 
+    composition_id: 
       enabled: true
-      prefix: "EHRID-"
-    subjectID: 
+      prefix: "COMPID-"
+    subject_id: 
       enabled: true
       prefix: "PID_"
     encounter_id:
@@ -61,7 +61,7 @@ pseudonymization:
     CompositionID:
       enabled: true
       prefix: "COMPID_"
-    BerichtID:
+    bericht_id:
       enabled: true
       prefix: "BERID_"
 
@@ -97,6 +97,16 @@ query_retries:
   enabled: true
   retry_count: 3  # ✅ Maximum retries for failed queries
   retry_interval_seconds: 10  # ✅ Wait 10 seconds before retrying
+
+logging:
+  level: INFO  # Options: DEBUG, INFO, WARNING, ERROR, CRITICAL
+  enable_console: true  # Enable console logging
+  enable_file: true  # Enable file logging
+  log_file: logs/application.log  # Path to the log file
+
+processing:
+  max_fhir_workers: 5  # ✅ Maximum concurrent FHIR requests (dynamically loaded)
+
 
 # Example override paths for using absolute paths
 # resources:

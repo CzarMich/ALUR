@@ -1,46 +1,50 @@
 ---
 Condition:
   query_template: |
-    SELECT
-      v/commit_audit/time_committed/value AS TIMECommitted,
-      e/ehr_status/subject/external_ref/id/value AS subjectID,
+    SELECT DISTINCT
+      c/uid/value AS composition_id, 
+      e/ehr_status/subject/external_ref/id/value AS subject_id,
       c/context/other_context[at0001]/items[openEHR-EHR-CLUSTER.case_identification.v0]/items[
         at0001]/value/value AS encounter_id,
       c/content[openEHR-EHR-EVALUATION.problem_diagnosis.v1]/data[at0001]/items[
-        openEHR-EHR-CLUSTER.problem_qualifier.v2]/items[at0004]/value/value AS Condition_category,
+        openEHR-EHR-CLUSTER.problem_qualifier.v2]/items[at0004]/value/value AS condition_category,
       c/content[openEHR-EHR-EVALUATION.problem_diagnosis.v1]/data[at0001]/items[
         openEHR-EHR-CLUSTER.problem_qualifier.v2]/items[at0004]/value/defining_code/code_string AS 
-        Condition_category_code,
+        condition_category_code,
       c/content[openEHR-EHR-EVALUATION.problem_diagnosis.v1]/data[at0001]/items[at0002]/value/
-        defining_code/code_string AS Condition_code,
+        defining_code/code_string AS condition_code,
       c/content[openEHR-EHR-EVALUATION.problem_diagnosis.v1]/data[at0001]/items[at0002]/value/value 
-        AS Condition_Display,
+        AS condition_display,
       c/content[openEHR-EHR-EVALUATION.problem_diagnosis.v1]/data[at0001]/items[at0002]/value/
-        defining_code/terminology_id/value AS Condition_code_system,
+        defining_code/terminology_id/value AS condition_code_system,
       c/content[openEHR-EHR-EVALUATION.problem_diagnosis.v1]/data[at0001]/items[at0003]/value/value 
-        AS Condition_recordedDate,
+        AS condition_recorded_date,
       c/content[openEHR-EHR-EVALUATION.problem_diagnosis.v1]/data[at0001]/items[at0012]/value/value 
-        AS Condition_BodySite,
+        AS condition_bodysite,
       c/content[openEHR-EHR-EVALUATION.problem_diagnosis.v1]/data[at0001]/items[at0012]/value/
-        defining_code/terminology_id/value AS Condition_BodySite_code_system,
+        defining_code/terminology_id/value AS condition_bodysite_code_system,
       c/content[openEHR-EHR-EVALUATION.problem_diagnosis.v1]/data[at0001]/items[at0012]/value/
-        defining_code/code_string AS Condition_BodySite_code_string,
+        defining_code/code_string AS condition_bodySite_code_string,
+      c/content[openEHR-EHR-EVALUATION.problem_diagnosis.v1]/data[at0001]/items[openEHR-EHR-CLUSTER.multiple_coding_icd10gm.v1]/items[at0001]/value/value 
+        AS manifestation_code,
+      c/content[openEHR-EHR-EVALUATION.problem_diagnosis.v1]/data[at0001]/items[openEHR-EHR-CLUSTER.multiple_coding_icd10gm.v1]/items[at0001]/value/
+        defining_code/code_string AS manifestation_display,
       c/content[openEHR-EHR-EVALUATION.problem_diagnosis.v1]/data[at0001]/items[at0005]/value/value 
-        AS Condition_Severity_Display,
+        AS condition_severity_display,
       c/content[openEHR-EHR-EVALUATION.problem_diagnosis.v1]/data[at0001]/items[at0005]/value/
-        defining_code/code_string AS Condition_Severity_Code,
+        defining_code/code_string AS condition_severity_code,
       c/content[openEHR-EHR-EVALUATION.problem_diagnosis.v1]/data[at0001]/items[at0005]/value/
-        defining_code/terminology_id/value AS Condition_severity_system,
+        defining_code/terminology_id/value AS condition_severity_system,
       c/content[openEHR-EHR-EVALUATION.problem_diagnosis.v1]/data[at0001]/items[
         openEHR-EHR-CLUSTER.problem_qualifier.v1]/items[at0003]/value/value AS Clinical_status,
       c/content[openEHR-EHR-EVALUATION.problem_diagnosis.v1]/data[at0001]/items[at0073]/value/value 
-        AS Condition_verificationStatus,
+        AS condition_verificationStatus,
       c/content[openEHR-EHR-EVALUATION.problem_diagnosis.v1]/data[at0001]/items[at0073]/value/
-        defining_code/code_string AS Condition_verificationStatus_Code,
+        defining_code/code_string AS condition_verificationStatus_code,
       c/content[openEHR-EHR-EVALUATION.problem_diagnosis.v1]/data[at0001]/items[at0073]/value/
-        defining_code/terminology_id/value AS Condition_verificationStatus_System
+        defining_code/terminology_id/value AS condition_verificationStatus_System
     FROM EHR e
-    CONTAINS (COMPOSITION c[openEHR-EHR-COMPOSITION.report.v1] AND COMPOSITION k[openEHR-EHR-COMPOSITION.report.v1] AND VERSION v)
+    CONTAINS (COMPOSITION c[openEHR-EHR-COMPOSITION.report.v1] AND COMPOSITION k[openEHR-EHR-COMPOSITION.report.v1])
     WHERE c/name/value = '{{composition_name}}' AND k/name/value = 'UKSH Einwilligung'
     AND (k/content[openEHR-EHR-ACTION.uksh_einwilligung.v1]/description[at0001]/items[openEHR-EHR-CLUSTER.uksh_consent.v1]/items[openEHR-EHR-CLUSTER.policy.v1]/items[at0006]/value/defining_code/code_string MATCHES {
             '1.2.276.0.76.3.1.454.1.100.1.1.1.1', 
@@ -48,29 +52,29 @@ Condition:
             '1.2.276.0.76.3.1.454.1.100.1.1.4.1'
         }
     )
-    AND v/commit_audit/time_committed/value <= '{{last_run_time}}'
+    AND c/context/start_time/value >= '{{last_run_time}}'
     OFFSET {{offset}} LIMIT {{limit}}
   parameters:
     composition_name: "Diagnose"
     last_run_time: "2025-01-29T00:00:00"
     offset: 0
-    limit: 10
+    limit: 5
     poll_interval: 1800 # Custome polling interval for condition in 30 minutes
 
   mappings:
     resourceType: "Condition"
-    id: "{{Composition_ID}}"
+    id: "{{composition_id}}"
     text:
       status: "generated"  # Indicates that the narrative is generated by the system
       div: >
        <div xmlns='http://www.w3.org/1999/xhtml'>
-       {% if BerichtID %}
-       Default text for Condition notes: {{BerichtID}}
+       {% if composition_id %}
+       Default text for Condition notes: {{composition_id_ciphertext}}
        {% else %} No additional notes available.
        {% endif %}
        </div>
     identifier:
-      - value: "{{Composition_ID}}"
+      - value: "{{composition_id}}"
     meta:
       profile:
         - "https://www.medizininformatik-initiative.de/fhir/core/modul-diagnose/StructureDefinition/Diagnose"
@@ -78,52 +82,50 @@ Condition:
     
     category:
       coding:
-        - system: "http://terminology.hl7.org/CodeSystem/condition-category"
-          code: "{{Condition_category_code}}"
-          display: "{{Condition_category}}"
+        - system: "http://terminology.hl7.org/codeSystem/condition-category"
+          code: "{{condition_category_code}}"
+          display: "{{condition_category}}"
     code:
       coding:
-        - system: "{{Condition_code_system}}"
-          code: "{{Condition_code}}"
-          display: "{{Condition_Display}}"
+        - system: "{{condition_code_system}}"
+          code: "{{condition_code}}"
+          display: "{{condition_display}}"
           extensions:
             - url: "http://fhir.de/StructureDefinition/icd-10-gm-manifestationscode"
               valueCoding:
-                system: "http://fhir.de/CodeSystem/icd-10-gm-manifestationscode"
-                code: "{{Manifestation_code}}"
-                display: "{{Manifestation_display}}"
+                system: "http://fhir.de/codeSystem/icd-10-gm-manifestationscode"
+                code: "{{manifestation_display}}"
+                display: "{{manifestation_code}}"
             - url: "http://fhir.de/StructureDefinition/icd-10-gm-diagnosesicherheit"
               valueCoding:
-                system: "https://fhir.kbv.de/CodeSystem/KBV_CS_SFHIR_ICD_DIAGNOSESICHERHEIT"
-                code: "Condition_verificationStatus_Code"
-                display: "Condition_verificationStatus"
+                system: "https://fhir.kbv.de/codeSystem/KBV_CS_SFHIR_ICD_DIAGNOSESICHERHEIT"
+                code: "{{condition_verificationStatus_ccode}}"
+                display: "{{condition_verificationstatus}}"
     subject:
-      reference: "Patient/{{subjectID}}"
       identifier:
-        value: "{{subjectID}}"
-        system: "http://USKH/Pseudonymised_ID"
+        value: "{{subject_id}}"
+        system: "http://UKSH/Pseudonymised_ID"
     encounter:
-      reference: "Encounter/{{encounter_id}}"
       identifier:
         value: "{{encounter_id}}"
-        system: "http://USKH/Encounter_ID"
-    recordedDate: "{{Condition_recordedDate}}"
+        system: "http://UKSH/Encounter_ID"
+    recordedDate: "{{condition_recorded_date}}"
     bodySite:
       coding:
-        - system: "{{Condition_BodySite_code_system}}"
-          code: "{{Condition_BodySite_code_string}}"
-          display: "{{Condition_BodySite}}"
+        - system: "{{condition_bodySite_code_system}}"
+          code: "{{condition_bodySite_code_string}}"
+          display: "{{condition_bodysite}}"
     severity:
       coding:
-        - system: "{{Condition_severity_system}}"
-          code: "{{Condition_Severity_Code}}"
-          display: "{{Condition_Severity_Display}}"
-    clinicalStatus: "{{Clinical_status}}"
+        - system: "{{condition_severity_system}}"
+          code: "{{condition_severity_code}}"
+          display: "{{condition_severity_display}}"
+    clinicalStatus: "{{clinical_status}}"
     verificationStatus:
       coding:
-        - system: "{{Condition_verificationStatus_System}}"
-          code: "{{Condition_verificationStatus_Code}}"
-          display: "{{Condition_verificationStatus}}"
+        - system: "{{condition_verification_status_system}}"
+          code: "{{condition_verificationStatus_code}}"
+          display: "{{condition_verification_status}}"
     notes:
       - text: "{{note_text}}"
         time: "{{note_time}}"

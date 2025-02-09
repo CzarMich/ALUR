@@ -1,0 +1,64 @@
+{
+  "resourceType": "Condition",
+  "id": "COND-12345",
+  "meta": {
+    "profile": [
+      "https://www.medizininformatik-initiative.de/fhir/core/modul-diagnose/StructureDefinition/Diagnose"
+    ]
+  },
+  "clinicalStatus": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+        "code": "active"
+      }
+    ]
+  },
+  "verificationStatus": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/condition-ver-status",
+        "code": "confirmed"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/condition-category",
+          "code": "encounter-diagnosis",
+          "display": "Encounter Diagnosis"
+        }
+      ]
+    }
+  ],
+  "severity": {
+    "coding": [
+      {
+        "system": "http://example.org/schweregrad",
+        "code": "severe",
+        "display": "Severe"
+      }
+    ]
+  },
+  "code": {
+    "coding": [
+      {
+        "system": "http://fhir.de/CodeSystem/dimdi/icd-10-gm",
+        "code": "E11.9",
+        "display": "Type 2 diabetes mellitus without complications"
+      }
+    ]
+  },
+  "subject": {
+    "identifier": {
+      "system": "urn:UKSH.ext.ReferenceID"
+    }
+  },
+  "encounter": {
+    "identifier": {
+      "system": "urn:UKSH.ext.Fallnummer"
+    }
+  }
+}

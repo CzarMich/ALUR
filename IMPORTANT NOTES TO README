@@ -39,3 +39,12 @@ Security:
 Ensure sensitive data such as API credentials are stored securely and consider using environment variable management tools for better security practices.
 
 export PYTHONPATH=/UserDirectory/openehr-fhir-mapping
+
+source ~/.zshrc  # or source ~/.bashrc
+
+
+pip freeze > requirements.txt  
+
+python -m venv test_env
+source test_env/bin/activate  # On Windows: test_env\Scripts\activate
+pip install -r requirements.txt

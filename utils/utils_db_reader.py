@@ -1,100 +1,142 @@
 import os
 import sys
+import logging
+import psycopg2
+import psycopg2.extras
+import sqlite3
+from typing import List, Dict, Any, Optional
+from psycopg2 import sql
+from utils.utils_session import get_db_connection, release_db_connection
+from conf.config import DB_TYPE
 
 # Ensure the project root is in Python's module search path
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-# Add the project root to Python's module search path
 sys.path.insert(0, BASE_DIR)
 
-import logging
-from typing import List, Dict, Any
-from utils.utils_session import get_db_connection, release_db_connection
+logger = logging.getLogger("DBReader")
 
 
-logger = logging.getLogger(__name__)
-
-def get_table_names() -> List[str]:
-    """
-    Retrieve the list of table names from the database.
-    """
-    conn = get_db_connection()
-    cursor = conn.cursor()
+def fetch_as_dict(cursor, query: str, params: Optional[tuple] = None) -> List[Dict[str, Any]]:
+    """Execute a SQL query and return results as a list of dictionaries."""
     try:
-        if conn.__class__.__name__ == "Connection":  # SQLite
-            query = "SELECT name FROM sqlite_master WHERE type='table';"
-        else:  # PostgreSQL
-            query = """
-                SELECT table_name 
-                FROM information_schema.tables 
-                WHERE table_schema = 'public';
-            """
-        cursor.execute(query)
-        tables = [row[0] for row in cursor.fetchall()]
-        logger.info(f"Found tables: {tables}")
-        return tables
+        cursor.execute(query, params or ())
+
+        # ✅ Extract column names dynamically
+        columns = [desc[0] for desc in cursor.description]
+        return [dict(zip(columns, row)) for row in cursor.fetchall()]
+    
     except Exception as e:
-        logger.error(f"Error retrieving table names: {e}")
+        logger.error(f"❌ Error executing query: {query} | {e}", exc_info=True)
         return []
-    finally:
-        release_db_connection(conn)
 
 
 def read_unprocessed_rows(table_name: str) -> List[Dict[str, Any]]:
     """
     Read unprocessed rows from the specified table.
+    - Converts table name to lowercase for consistency.
     """
-    logger.info(f"Reading unprocessed rows from table '{table_name}'.")
     conn = get_db_connection()
-    cursor = conn.cursor()
+    rows = []
+
     try:
-        query = f"SELECT * FROM {table_name} WHERE processed = FALSE"
+        cursor_factory = psycopg2.extras.RealDictCursor if DB_TYPE == "postgres" else None
+        cursor = conn.cursor(cursor_factory=cursor_factory)
+
+        # ✅ Convert table name to lowercase
+        table_name = table_name.lower()
+
+        # ✅ Query unprocessed rows safely using sql.Identifier
+        query = sql.SQL("SELECT * FROM {} WHERE processed = FALSE").format(sql.Identifier(table_name))
         cursor.execute(query)
+
         rows = cursor.fetchall()
-        logger.info(f"Retrieved {len(rows)} unprocessed rows from table '{table_name}'.")
-        return [dict(row) for row in rows]
+
+        if rows:
+            logger.info(f"✅ {len(rows)} unprocessed rows found in '{table_name}'.")
+        else:
+            logger.info(f"🛑 No unprocessed rows found in '{table_name}'.")
+
+        return rows
+
     except Exception as e:
-        logger.error(f"Error reading unprocessed rows from table '{table_name}': {e}")
+        logger.error(f"❌ Error reading unprocessed rows from '{table_name}': {e}", exc_info=True)
         return []
+    
     finally:
-        release_db_connection(conn)
+        if conn:
+            release_db_connection(conn)
 
 
 def read_unprocessed_rows_in_batch(table_name: str, batch_size: int) -> List[Dict[str, Any]]:
     """
     Read unprocessed rows from the specified table in batches.
+    - Uses lowercase table names for consistency.
     """
-    logger.info(f"Reading up to {batch_size} unprocessed rows from table '{table_name}'.")
     conn = get_db_connection()
-    cursor = conn.cursor()
+    rows = []
+
     try:
-        query = f"SELECT * FROM {table_name} WHERE processed = FALSE LIMIT {batch_size}"
-        cursor.execute(query)
+        cursor_factory = psycopg2.extras.RealDictCursor if DB_TYPE == "postgres" else None
+        cursor = conn.cursor(cursor_factory=cursor_factory)
+
+        # ✅ Convert table name to lowercase
+        table_name = table_name.lower()
+
+        # ✅ Query unprocessed rows safely with batch size
+        query = sql.SQL("SELECT * FROM {} WHERE processed = FALSE LIMIT %s").format(sql.Identifier(table_name))
+        cursor.execute(query, (batch_size,))
+
         rows = cursor.fetchall()
-        logger.info(f"Retrieved {len(rows)} unprocessed rows (batch) from table '{table_name}'.")
-        return [dict(row) for row in rows]
+
+        if rows:
+            logger.info(f"✅ {len(rows)} rows retrieved in batch from '{table_name}'.")
+        else:
+            logger.info(f"🛑 No unprocessed rows in batch for '{table_name}'.")
+
+        return rows
+
     except Exception as e:
-        logger.error(f"Error reading unprocessed rows in batch from table '{table_name}': {e}")
+        logger.error(f"❌ Error reading unprocessed rows in batch from '{table_name}': {e}", exc_info=True)
         return []
+    
     finally:
-        release_db_connection(conn)
+        if conn:
+            release_db_connection(conn)
 
 
-def mark_row_as_processed(table_name: str, row_id: int):
+def mark_row_as_processed(table_name: str, row_id: Any) -> bool:
     """
     Mark a row as processed in the database.
+    - Converts table name to lowercase for consistency.
     """
-    logger.info(f"Marking row ID {row_id} as processed in table '{table_name}'.")
     conn = get_db_connection()
-    cursor = conn.cursor()
+
     try:
-        if conn.__class__.__name__ == "Connection":  # SQLite
-            query = f"UPDATE {table_name} SET processed = TRUE WHERE id = ?"
-        else:  # PostgreSQL
-            query = f"UPDATE {table_name} SET processed = TRUE WHERE id = %s"
+        cursor = conn.cursor()
+
+        # ✅ Convert table name to lowercase
+        table_name = table_name.lower()
+
+        # ✅ Update query for processed rows
+        query = sql.SQL("UPDATE {} SET processed = TRUE WHERE id = %s").format(sql.Identifier(table_name))
         cursor.execute(query, (row_id,))
+
         conn.commit()
-        logger.info(f"Marked row ID {row_id} as processed in table '{table_name}'.")
+        logger.info(f"✅ Marked row ID {row_id} as processed in '{table_name}'.")
+        return True
+
     except Exception as e:
-        logger.error(f"Error marking row ID {row_id} as processed in table '{table_name}': {e}")
+        logger.error(f"❌ Error marking row ID {row_id} as processed in '{table_name}': {e}", exc_info=True)
+        return False
+
     finally:
-        release_db_connection(conn)
+        if conn:
+            release_db_connection(conn)
+
+
+if __name__ == "__main__":
+    """
+    Test the database reading functionality.
+    """
+    print("Tables in database:", read_unprocessed_rows("fhir_queue"))
+    print("Unprocessed rows in 'fhir_queue':", read_unprocessed_rows("fhir_queue"))
