@@ -1,0 +1,152 @@
+---
+procedure:
+  query_template: |
+    SELECT DISTINCT
+      c/uid/value AS composition_id, 
+      e/ehr_status/subject/external_ref/id/value AS subject_id,
+      c/context/other_context[at0001]/items[openEHR-EHR-CLUSTER.case_identification.v0]/items[at0001]/value/value AS encounter_id,
+      c/content[openEHR-EHR-ACTION.procedure.v1]/description[at0001]/items[at0067]/value/value AS procedure_category_display,
+      c/content[openEHR-EHR-ACTION.procedure.v1]/description[at0001]/items[at0067]/value/defining_code/terminology_id/value AS procedure_category_system,
+      c/content[openEHR-EHR-ACTION.procedure.v1]/description[at0001]/items[at0067]/value/defining_code/code_string AS procedure_category_code,
+      c/content/description[at0001]/items[at0002]/value/encoding/code_string AS procedure_code,
+      c/content/description[at0001]/items[at0002]/value/value AS procedure_display,
+      c/content/description[at0001]/items[at0002]/value/hyperlink/value AS procedure_code_system_version,
+      c/content/description[at0001]/items[at0002]/value/encoding/terminology_id/value AS procedure_code_system, 
+      c/content[openEHR-EHR-ACTION.procedure.v1]/time/value AS procedure_performed_time,
+      c/context/start_time/value AS procedure_recorded_time,
+      c/content[openEHR-EHR-ACTION.procedure.v1]/description[at0001]/items[at0063]/value AS bodysite_display,
+      c/content[openEHR-EHR-ACTION.procedure.v1]/description[at0001]/items[at0063]/value/defining_code/terminology_id/value AS bodysite_code_system,
+      c/content[openEHR-EHR-ACTION.procedure.v1]/description[at0001]/items[at0063]/value/defining_code/code_string AS bodysite_code,
+      c/content[openEHR-EHR-ACTION.procedure.v1]/description[at0001]/items[at0014]/value AS durchführungsabsicht
+    FROM EHR e
+    CONTAINS (COMPOSITION c[openEHR-EHR-COMPOSITION.report.v1] AND COMPOSITION k[openEHR-EHR-COMPOSITION.report.v1])
+    WHERE c/name/value = '{{composition_name}}' 
+    AND k/name/value = 'UKSH Einwilligung'
+    AND (
+      k/content[openEHR-EHR-ACTION.uksh_einwilligung.v1]/description[at0001]/items[openEHR-EHR-CLUSTER.uksh_consent.v1]/items[openEHR-EHR-CLUSTER.policy.v1]/items[at0006]/value/defining_code/code_string MATCHES {
+        '1.2.276.0.76.3.1.454.1.100.1.1.1.1', 
+        '1.2.276.0.76.3.1.454.1.100.1.1.2.1',
+        '1.2.276.0.76.3.1.454.1.100.1.1.4.1'
+      }
+    )
+    AND c/context/start_time/value >= '{{last_run_time}}'
+    AND c/context/start_time/value < '{{end_run_time}}'
+    OFFSET {{offset}} LIMIT {{limit}}
+
+  parameters:
+    composition_name: "KDS_Prozedur"
+    last_run_time: "2024-02-29T00:00:00"
+    offset: 0
+    limit: 5
+    poll_interval: 1800  # Custom polling interval for procedures (30 minutes)
+
+  mappings:
+    resourceType: "Procedure"
+    id: "{{composition_id}}"
+
+    text:
+      status: "generated"
+      div: >
+        <div xmlns='http://www.w3.org/1999/xhtml'>
+        {% if composition_id %}
+        Default text for procedure notes: {{composition_id}}
+        {% else %} No additional notes available.
+        {% endif %}
+        </div>
+
+    identifier:
+      - value: "{{composition_id}}"
+
+    meta:
+      profile:
+        - "https://www.medizininformatik-initiative.de/fhir/core/modul-prozedur/StructureDefinition/Procedure"
+
+    status: "completed"
+
+    extension:
+      - url: "http://example.org/fhir/StructureDefinition/procedure-extension"
+        valueString: "{{durchführungsabsicht}}"
+
+    category:
+      coding:
+        - system: "{{procedure_category_system}}"
+          code: "{{procedure_category_code | string}}"
+          display: "{{procedure_category_display}}"
+
+    code:
+      coding:
+        - system: "{{procedure_code_system}}"
+          code: "{{procedure_code | string}}"
+          display: "{{procedure_display}}"
+          version: "{{procedure_code_system_version}}"
+      
+    subject:
+      identifier:
+        value: "{{subject_id}}"
+        system: "http://local/Pseudonymised_ID"
+
+    encounter:
+      identifier:
+        value: "{{encounter_id}}"
+        system: "http://local/Encounter_ID"
+
+    performedDateTime: "{{procedure_performed_time}}"
+
+    bodySite:
+      coding:
+        - system: "{{bodysite_code_system}}"
+          code: "{{bodysite_code | string}}"
+          display: "{{bodysite_display}}"
+
+    recorder:
+      identifier:
+        value: "{{recorder_id}}"
+        system: "http://local/Recorder_ID"
+
+    performer:
+      - actor:
+          identifier:
+            value: "{{performer_id}}"
+            system: "http://local/Performer_ID"
+        function:
+          coding:
+            - system: "{{performer_function_system}}"
+              code: "{{performer_function_code}}"
+              display: "{{performer_function_display}}"
+
+    reasonCode:
+      - coding:
+          - system: "{{reasonCode_system}}"
+            code: "{{reasonCode_code}}"
+            display: "{{reasonCode_display}}"
+
+    complication:
+      - coding:
+          - system: "{{complication_system}}"
+            code: "{{complication_code}}"
+            display: "{{complication_display}}"
+
+    followUp:
+      - coding:
+          - system: "{{followUp_system}}"
+            code: "{{followUp_code}}"
+            display: "{{followUp_display}}"
+
+    note:
+      - text: "{{note_text}}"
+        time: "{{note_time}}"
+
+    focalDevice:
+      - action:
+          coding:
+            - system: "{{focalDevice_action_system}}"
+              code: "{{focalDevice_action_code}}"
+              display: "{{focalDevice_action_display}}"
+        manipulated:
+          identifier:
+            value: "{{focalDevice_manipulated}}"
+            system: "http://local/FocalDevice_Manipulated"
+
+    usedReference:
+      - reference: "{{usedReference}}"
+

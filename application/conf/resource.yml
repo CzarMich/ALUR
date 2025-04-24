@@ -1,0 +1,121 @@
+resources:
+# Uncomment and configure other resources as needed
+  - name: condition
+    priority: 1
+    aql_file: condition.yml
+    mapping_file: condition.yml
+    required_fields:
+      - subject_id
+  - name: procedure
+    priority: 1
+    aql_file: procedure.yml
+    mapping_file: procedure.yml
+    required_fields:
+      - subject_id
+#  - name: Observation
+#    priority: 1
+#    aql_file: observation.yml
+#    mapping_file: observation.yml
+#    required_fields:
+#      - subject_id
+#  - name: Encounter
+#    priority: 1
+#    aql_file: encounter.yml
+#    mapping_file: encounter.yml
+#    required_fields:
+#      - subject_id
+#  - name: Patient
+#    priority: 1  
+#    aql_file: patient.yml
+#    mapping_file: patient.yml
+#    required_fields:
+#      - subject_id
+#  - name: Organization
+#    priority: 1  
+#    aql_file: organization.yml
+#    mapping_file: organization.yml
+#    required_fields:
+#      - organization_id
+#  - name: Practitioner
+#    priority: 1  
+#    aql_file: practitioner.yml
+#    mapping_file: practitioner.yml
+#    required_fields:
+#      - practitioner_id
+#  - name: Location
+#    priority: 1  
+#    aql_file: location.yml
+#    mapping_file: location.yml
+#    required_fields:
+#      - location_id
+#  - name: MedicationRequest  
+#    priority: 1  
+#    aql_file: medication_request.yml  
+#    mapping_file: medication_request.yml  
+#    required_fields:  
+#      - subject_id  
+#      - composition_id  
+#  - name: MedicationDispense  
+#    priority: 1  
+#    aql_file: medication_dispense.yml  
+#    mapping_file: medication_dispense.yml  
+#    required_fields:  
+#      - subject_id  
+#      - composition_id  
+#  - name: MedicationAdministration  
+#    priority: 1  
+#    aql_file: medication_administration.yml  
+#    mapping_file: medication_administration.yml  
+#    required_fields:  
+#      - subject_id  
+#      - composition_id  
+#  - name: DiagnosticReport  
+#    priority: 1    
+#    aql_file: diagnostic_report.yml  
+#    mapping_file: diagnostic_report.yml  
+#    required_fields:  
+#      - subject_id  
+#      - composition_id  
+#  - name: DocumentReference  
+#    priority: 1    
+#    aql_file: document_reference.yml  
+#    mapping_file: document_reference.yml  
+#    required_fields:  
+#      - subject_id  
+#      - composition_id  
+#  - name: ImagingStudy  
+#    priority: 1    
+#    aql_file: imaging_study.yml  
+#    mapping_file: imaging_study.yml    
+#      - subject_id  
+#      - composition_id  
+#  - name: Specimen  
+#    priority: 1    
+#    aql_file: specimen.yml  
+#    mapping_file: specimen.yml    
+#      - subject_id  
+#      - composition_id  
+#  - name: AllergyIntolerance  
+#    priority: 1    
+#    aql_file: allergy_intolerance.yml  
+#    mapping_file: allergy_intolerance.yml    
+#      - subject_id  
+#      - composition_id  
+#  - name: Immunization  
+#    priority: 1    
+#    aql_file: immunization.yml       
+#      - subject_id  
+#      - composition_id  
+#  - name: CarePlan  
+#    priority: 1    
+#    aql_file: care_plan.yml  
+#    mapping_file: care_plan.yml    
+#      - subject_id  
+#      - composition_id 
+#    - name: consent
+    #priority: 1
+    #aql_file: consent.yml
+    #mapping_file: consent.yml
+    #required_fields:
+    #  - subject_id
+    #  - composition_id

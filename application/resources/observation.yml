@@ -1,0 +1,122 @@
+---
+Observation:
+  query_template: |
+    SELECT DISTINCT
+    c/context/start_time/value AS processed_time,
+    c/context/other_context[at0001]/items[at0002]/value/value as report_id_string,
+    c/content[openEHR-EHR-OBSERVATION.laboratory_test_result.v1]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.laboratory_test_analyte.v1]/items[at0026]/value/id AS probe_id_string, 
+    e/ehr_status/subject/external_ref/id/value as subject_id,
+    c/context/other_context[at0001]/items[at0005]/value/value AS report_status_string,
+    c/context/other_context[at0001]/items[openEHR-EHR-CLUSTER.case_identification.v0]/items[at0001]/value/value AS encounter_id,
+    c/content[openEHR-EHR-OBSERVATION.laboratory_test_result.v1]/protocol[at0004]/items[at0094]/items[at0063]/value/id AS observation_order_id_string,
+    c/content[openEHR-EHR-OBSERVATION.laboratory_test_result.v1]/data[at0001]/events[at0002]/data[at0003]/items[at0005]/value/value AS observation_category_display_string,
+    c/content[openEHR-EHR-OBSERVATION.laboratory_test_result.v1]/data[at0001]/events[at0002]/data[at0003]/items[at0005]/value/defining_code/code_string AS observation_category_code_string,
+    c/content[openEHR-EHR-OBSERVATION.laboratory_test_result.v1]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.specimen.v1]/items[at0087]/value/value AS body_site_string,
+      c/content[openEHR-EHR-OBSERVATION.laboratory_test_result.v1]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.laboratory_test_analyte.v1]/items[at0026]/value/id AS specimen_name_string_text,
+    c/content[openEHR-EHR-OBSERVATION.laboratory_test_result.v1]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.laboratory_test_analyte.v1]/items[at0024]/name/mappings/target/code_string AS local_code_string,
+    c/content[openEHR-EHR-OBSERVATION.laboratory_test_result.v1]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.laboratory_test_analyte.v1]/items[at0024]/value/value AS observation_display_string,
+    c/content[openEHR-EHR-OBSERVATION.laboratory_test_result.v1]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.laboratory_test_analyte.v1]/items[at0024]/value/defining_code/code_string AS observation_loinc_code_string,
+    c/content[openEHR-EHR-OBSERVATION.laboratory_test_result.v1]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.laboratory_test_analyte.v1]/items[at0001]/value/magnitude AS observation_value_value,
+    c/content[openEHR-EHR-OBSERVATION.laboratory_test_result.v1]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.laboratory_test_analyte.v1]/items[at0001]/value/units AS observation_unit_string,
+    c/content[openEHR-EHR-OBSERVATION.laboratory_test_result.v1]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.laboratory_test_analyte.v1]/items[at0001]/value/normal_range/lower/magnitude AS lower_range_value,
+    c/content[openEHR-EHR-OBSERVATION.laboratory_test_result.v1]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.laboratory_test_analyte.v1]/items[at0001]/value/normal_range/upper/magnitude AS upper_range_value,
+    c/content[openEHR-EHR-OBSERVATION.laboratory_test_result.v1]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.laboratory_test_analyte.v1]/items[at0001]/value/value AS text_result_string,
+    c/content[openEHR-EHR-OBSERVATION.laboratory_test_result.v1]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.laboratory_test_analyte.v1]/items[at0005]/value/value. as result_status_string,
+    c/content[openEHR-EHR-OBSERVATION.laboratory_test_result.v1]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.laboratory_test_analyte.v1]/items[at0004]/value/defining_code/code_string as interpretation_code_string,
+    c/content[openEHR-EHR-OBSERVATION.laboratory_test_result.v1]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.laboratory_test_analyte.v1]/items[at0004]/value/value as interpretation_value_string,
+    c/content[openEHR-EHR-OBSERVATION.laboratory_test_result.v1]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.laboratory_test_analyte.v1]/items[at0004]/value/defining_code/terminology_id/value as interpretation_terminology_string
+    FROM EHR e
+    CONTAINS COMPOSITION c[openEHR-EHR-COMPOSITION.report-result.v1]
+    WHERE c/name/value = '{{composition_name}}'
+    AND c/context/start_time/value >= '{{last_run_time}}'
+    AND c/context/start_time/value < '{{end_run_time}}'
+    OFFSET {{offset}} LIMIT {{limit}}
+
+  parameters:
+    composition_name: "Laborbericht"
+    last_run_time: "2024-01-29T00:00:00"
+    offset: 0
+    limit: 10
+    poll_interval: 1800  # 30 minutes polling interval
+
+  mappings:
+    resourceType: "Observation"
+    id: "{{report_id_string}}-{{probe_id_string}}" 
+    identifier:
+      - value: "{{report_id_string}}-{{probe_id_string}}"
+
+    status: "final"
+
+    category:
+      coding:
+        - system: "{{observation_category_system_string}}"
+          code: "{{observation_category_code_string}}"
+          display: "{{observation_category_display_string}}"
+    
+    specimen:
+      identifier:
+        value: "{{specimen_name_string_text | string}}"
+        system: "http://local/specimen"
+
+    bodySite:
+      coding:
+        - system: "{{bodysite_code_system}}"
+          code: "{{bodySite_code_string}}"
+          display: "{{bodysite}}"
+
+    code:
+      coding:
+        - system: "http://loinc.org"
+          code: "{{observation_loinc_code_string}}"
+          display: "{{observation_display_string}}"
+        - system: "http://local/Local_Lab_Codes"
+          code: "{{local_code_string}}"
+          display: "{{local_code_string}}"
+
+    subject:
+      identifier:
+        value: "{{subject_id}}"
+        system: "http://local/pseudonymised_id"
+
+    encounter:
+      identifier:
+        value: "{{encounter_id}}"
+        system: "http://local/encounter_id"
+
+    effectiveDateTime: "{{processed_time}}"
+    issued: "{{processed_time}}"
+
+    valueQuantity:
+      value: "{{observation_value_value | float | round(2)}}"
+      unit: "{{observation_unit_string}}"
+      system: "http://unitsofmeasure.org"
+
+    valueString: "{{text_result_string if not observation_value_value else ''}}"
+
+    referenceRange:
+      - low:
+          value: "{{lower_range_value | float | round(2)}}"
+          unit: "{{observation_unit_string}}"
+          system: "http://unitsofmeasure.org"
+      - high:
+          value: "{{upper_range_value | float | round(2)}}"
+          unit: "{{observation_unit_string}}"
+          system: "http://unitsofmeasure.org"
+
+    interpretation:
+      coding:
+        - system: "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation"
+          code: "{{interpretation_code_string}}"
+          display: "{{interpretation_value_string}}"
+
+    derivedFrom:
+      identifier:
+        value: "{{observation_order_id_string}}"
+        system: "http://local/order_id"
+
+    component:
+      - code:
+          coding:
+            - system: "{{component_code_system_string}}"
+              code: "{{component_code_code_string}}"
+              display: "{{component_code_display_string}}"

@@ -1,0 +1,39 @@
+# 🔒 Python Virtual Environments
+venv/
+.env
+conf/.env
+conf/environment/.env
+conf/environment/key/key.bin
+
+# 🐍 Python Cache & Compiled Files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+
+# 🧪 Test artifacts
+.coverage
+.tox/
+.cache/
+.pytest_cache/
+
+# 🪵 Logs
+logs/
+*.log
+
+# 🏗️ Build artifacts
+dist/
+build/
+*.egg-info/
+
+# 🔐 Secrets (just in case)
+secrets.env
+*.pem
+*.crt
+*.key
+
+# 💻 IDE configs
+.vscode/
+.idea/
+.DS_Store

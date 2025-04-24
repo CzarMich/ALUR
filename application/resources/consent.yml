@@ -1,0 +1,65 @@
+---
+consent:
+  query_template: |
+    SELECT DISTINCT
+      c/uid/value AS composition_id, 
+      v/commit_audit/time_committed/value AS committed_datetime,
+      e/ehr_status/subject/external_ref/id/value AS subject_id,
+      c/context/other_context[at0001]/items[at0005]/value/value as consent_status,
+      c/content[openEHR-EHR-ACTION.uksh_einwilligung.v1]/description[at0001]/items[openEHR-EHR-CLUSTER.uksh_consent.v1]/items[at0001]/value/value AS consent_type,
+      c/content[openEHR-EHR-ACTION.uksh_einwilligung.v1]/description[at0001]/items[openEHR-EHR-CLUSTER.uksh_consent.v1]/items[at0003]/value/value AS start_time, 
+      c/content[openEHR-EHR-ACTION.uksh_einwilligung.v1]/description[at0001]/items[openEHR-EHR-CLUSTER.uksh_consent.v1]/items[at0004]/value/value AS end_time, 
+      c/content[openEHR-EHR-ACTION.uksh_einwilligung.v1]/description[at0001]/items[openEHR-EHR-CLUSTER.uksh_consent.v1]/items[openEHR-EHR-CLUSTER.policy.v1]/items[at0005]/value/value as policyrule,
+      c/content[openEHR-EHR-ACTION.uksh_einwilligung.v1]/description[at0001]/items[openEHR-EHR-CLUSTER.uksh_consent.v1]/items[at0005]/value/value as consent_version,
+      c/content[openEHR-EHR-ACTION.uksh_einwilligung.v1]/description[at0001]/items[openEHR-EHR-CLUSTER.uksh_consent.v1]/items[at0009]/value/value as uri_einwilligungsnachweis,
+      c/content[openEHR-EHR-ACTION.uksh_einwilligung.v1]/description[at0001]/items[openEHR-EHR-CLUSTER.uksh_consent.v1]/items[openEHR-EHR-CLUSTER.policy.v1]/items[at0006]/value/value as consent,
+      c/content[openEHR-EHR-ACTION.uksh_einwilligung.v1]/description[at0001]/items[openEHR-EHR-CLUSTER.uksh_consent.v1]/items[openEHR-EHR-CLUSTER.policy.v1]/items[at0006]/value/defining_code/code_string as consent_code,
+      c/content[openEHR-EHR-ACTION.uksh_einwilligung.v1]/description[at0001]/items[openEHR-EHR-CLUSTER.uksh_consent.v1]/items[openEHR-EHR-CLUSTER.policy.v1]/items[at0006]/value/defining_code/terminology_id/value as consent_code_system,
+      c/content[openEHR-EHR-ACTION.uksh_einwilligung.v1]/description[at0001]/items[openEHR-EHR-CLUSTER.uksh_consent.v1]/items[openEHR-EHR-CLUSTER.policy.v1]/items[at0005]/value/value as provision_type
+    FROM EHR e
+    CONTAINS VERSION v
+    CONTAINS COMPOSITION c[openEHR-EHR-COMPOSITION.report.v1]  
+    WHERE c/name/value = '{{composition_name}}'
+        AND c/context/start_time/value >= '{{last_run_time}}'
+    AND c/context/start_time/value < '{{end_run_time}}'
+    OFFSET {{offset}} LIMIT {{limit}}
+
+  parameters:
+    composition_name: "UKSH Einwilligung"
+    last_run_time: "2025-03-03T00:00:00"
+    offset: 0
+    limit: 10
+    poll_interval: 1800
+  group_by: "composition_id"
+  mappings:
+    resourceType: "Consent"
+    id: "{{composition_id}}"
+    identifier:
+      - value: "{{composition_id}}"
+    meta:
+      profile:
+        - "https://www.medizininformatik-initiative.de/fhir/modul-consent/StructureDefinition/mii-pr-consent-einwilligung"
+    status: "{{consent_status}}"
+    scope:
+      coding:
+        - system: "http://terminology.hl7.org/CodeSystem/consentscope"
+          code: "research"
+    policy:
+      - uri: "urn:name:{{consent_type}}"
+    category:
+      - system: "https://www.medizininformatik-initiative.de/fhir/modul-consent/CodeSystem/mii-cs-consent-consent_category"
+        code: "2.16.840.1.113883.3.1937.777.24.2.184"
+    policyRule:
+      coding:
+        - system: "http://fhir.de/ConsentManagement/StructureDefinition/Xacml"
+          code: "{{consent_type}}"
+          display: "{{policyRule}}"
+    sourceReference:
+      identifier:
+        value: "{{uri_einwilligungsnachweis}}"
+    subject:
+      identifier:
+        value: "{{subject_id}}"
+    dateTime: "{{committed_dateTime}}"
+    provision: "{{ provision }}"
+    # Note: provision is now injected in by the application and must NOT be templated here!

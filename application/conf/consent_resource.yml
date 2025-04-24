@@ -1,0 +1,8 @@
+resources:
+  - name: consent
+    priority: 1
+    aql_file: consent.yml
+    mapping_file: consent.yml
+    required_fields:
+      - subject_id
+      - composition_id

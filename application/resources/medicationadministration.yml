@@ -1,0 +1,46 @@
+MedicationStatement:
+  query_template: |
+    SELECT
+      c/uid/value AS composition_id,
+      e/ehr_status/subject/external_ref/id/value AS subject_id,
+      c/context/start_time/value AS statement_date,
+      o/data[at0001]/items[at0002]/value/value AS medication_code,
+      o/data[at0001]/items[at0002]/value/defining_code/terminology_id/value AS medication_system,
+      o/data[at0001]/items[at0002]/value/defining_code/code_string AS medication_code_string,
+      o/data[at0001]/items[at0009]/value/value AS reason,
+      o/data[at0001]/items[at0012]/value/value AS status,
+      o/data[at0001]/items[at0013]/value/value AS effective_period_start,
+      o/data[at0001]/items[at0014]/value/value AS effective_period_end
+    FROM EHR e
+    CONTAINS COMPOSITION c[openEHR-EHR-COMPOSITION.medication_summary.v1]
+    CONTAINS EVALUATION o[openEHR-EHR-EVALUATION.medication_statement.v0]
+    WHERE c/name/value = 'medicationa_dministration'
+      AND c/context/start_time/value >= '{{last_run_time}}'
+      AND c/context/start_time/value < '{{end_run_time}}'
+    OFFSET {{offset}} LIMIT {{limit}}
+
+  parameters:
+    last_run_time: "2025-01-01T00:00:00"
+    end_run_time: "2025-12-31T23:59:59"
+    offset: 0
+    limit: 50
+
+  mappings:
+    resourceType: "MedicationStatement"
+    id: "{{composition_id}}"
+    status: "{{status | default('active')}}"
+    medicationCodeableConcept:
+      coding:
+        - system: "{{medication_system}}"
+          code: "{{medication_code_string}}"
+          display: "{{medication_code}}"
+    subject:
+      identifier:
+        system: "http://local/pseudonym"
+        value: "{{subject_id}}"
+    effectivePeriod:
+      start: "{{effective_period_start}}"
+      end: "{{effective_period_end}}"
+    reasonCode:
+      - text: "{{reason}}"
+    dateAsserted: "{{statement_date}}"

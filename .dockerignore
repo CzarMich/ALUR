@@ -1,0 +1,30 @@
+# Ignore local venv
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore logs and database files
+logs/
+*.log
+*.db
+
+# Ignore local development configs
+conf/environment/.env
+conf/environment/key/key.bin
+secrets.env
+
+# Ignore unnecessary files
+.DS_Store
+.vscode/
+.idea/
+
+# Git files
+.git
+.gitignore
+
+# Build artifacts
+dist/
+build/
+*.egg-info/

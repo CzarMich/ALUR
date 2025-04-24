@@ -1,0 +1,117 @@
+# Configuration file to manage resources, file paths, authentication, and pseudonymization settings
+fetch_by_date:
+  enabled: false  # Enable or disable fetching by date
+  start_date: "2025-02-01T00:00:00"
+  end_date: "2025-03-08T00:00:00"  # Leave empty for open-ended fetch
+  fetch_interval_hours: 10  # ✅ Set fetch frequency in hours (e.g., 6 hours)
+
+polling:
+  enabled: true  # ✅ Enable global polling
+  interval_seconds: 250  # ✅ Global polling every 30 minutes (1800 seconds)
+  max_parallel_fetches: 5  # ✅ Limit concurrent fetches
+
+priority_fetching:
+  enabled: false  # ✅ Enable or disable priority-based fetching
+  priority_levels:
+    1: 60   # Fetch Priority 1 every 30 minutes
+    2: 120  # Fetch Priority 2 every 2 hours
+    3: 720  # Fetch Priority 3 every 12 hours
+    4: 1440 # Fetch Priority 4 every 24 hours
+
+paths:
+  env_file: .env
+  state_file: logs/state.json
+  temp_folder: data/temp
+  db_file: data/aql2fhir.db
+  log_folder: logs/
+
+authentication:
+  method: basic  # ✅ Supported options: basic, bearer, api_key
+
+pseudonymization:
+  enabled: true  # Global switch to enable or disable pseudonymization
+  GPAS: false  # Enable GPAS pseudonymization
+  GPAS_Domain: "Demo_Domain"  # GPAS Domain
+  use_deterministic_aes: true  # ✅ NEW: Use deterministic encryption if True
+  elements_to_pseudonymize:
+    report_id_string: 
+      enabled: true
+      prefix: ""
+    composition_id: 
+      enabled: true
+      prefix: ""
+    subject_id: 
+      enabled: true
+      prefix: ""
+      domain: "Demo_Domain"
+    encounter_id:
+      enabled: true
+      prefix: ""
+      domain: "Demo_Domain"
+    patient_dob:
+      enabled: false
+    laboranfoderung_id:
+      enabled: true
+      prefix: ""
+    bericht_id:
+      enabled: true
+      prefix: ""
+    composition_id:
+      enabled: true
+      prefix: ""
+
+database:
+  name: ${POSTGRES_DB:-touch}  # Uses environment variable, falls back to `touch`
+  host: ${DB_HOST:-localhost}  # Uses environment variable, defaults to localhost
+  port: ${DB_PORT:-5432}  # Uses environment variable, defaults to 5432
+  user: ${POSTGRES_USER:-postgres}  # Uses environment variable, defaults to postgres
+  password: ${POSTGRES_PASSWORD:-password}  # Uses environment variable, defaults to password
+  max_connections: ${DB_MAX_CONNECTIONS:-20}  # Defaults to 20
+
+sanitize:
+  enabled: true
+  elements_to_sanitize:
+    - composition_id
+    - subjectID
+    - encounter_id
+    - patient_dob
+    - laboranfoderung_id
+    - composition_id
+    - bericht_id
+
+processing:
+  use_batch: false
+  batch_size: 100  # ✅ Set batch size for processing
+
+server_health_check:
+  enabled: true
+  retry_interval_seconds: 20  # ✅ Retry every 20 seconds
+  max_retries: null  # ✅ Unlimited retries (use `null` instead of "unlimited")
+
+query_retries:
+  enabled: true
+  retry_count: 3  # ✅ Maximum retries for failed queries
+  retry_interval_seconds: 10  # ✅ Wait 10 seconds before retrying
+
+logging:
+  level: ERROR  # Options: DEBUG, INFO, WARNING, ERROR, CRITICAL
+  enable_console: true  # Enable console logging
+  enable_file: true  # Enable file logging
+  log_file: logs/application.log  # Path to the log file
+
+processing:
+  max_fhir_workers: 10  # ✅ Maximum concurrent FHIR requests (dynamically loaded)
+
+logging:
+  verbose: true  # or false
+
+
+# Example override paths for using absolute paths
+# resources:
+# paths:
+#   state_file: /opt/AQL2FHIR/state/state.json
+#   temp_folder: /opt/application/temp
+#   db_file: /opt/AQL2FHIR/application/temp/db/Aql2FHIR.db
+#   aql_folder: /opt/AQL2FHIR/application/openehr_aql
+#   mapping_folder: /opt/AQL2FHIR/application/mappings
+#   log_folder: /opt/AQL2FHIR/application/logs
