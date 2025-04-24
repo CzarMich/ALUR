@@ -49,7 +49,7 @@ jobs:
       id: meta
       uses: docker/metadata-action@v5
       with:
-        images: yourdockerhubusername/alur
+        images: anywarmichael/alur
         tags: |
           type=sha
           type=ref,event=branch,enable=true,branch=main
