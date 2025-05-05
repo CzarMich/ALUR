@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  alur:
+    volumes:
+      - ./application:/app/application
+      - ./logs:/app/logs
+      - ./data:/app/data
+      - ./application/conf:/app/application/conf
+      - ./application/resources:/app/application/resources
+    environment:
+      - POLL_INTERVAL=120
+      - PYTHONUNBUFFERED=1
+    command: python application/main.py

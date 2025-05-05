@@ -1,10 +1,12 @@
 # ALUR Project – openEHR AQL–FHIR Mapper  
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 
-> 🔓 **Open Source Release**: This project is available under the MIT License. You are free to use, adapt, and contribute under the conditions defined in the `LICENSE` file.  
-> 🧠 **Project Lead**: Maintained by **Michael Anywar** — Healthcare Technology Researcher at **Tallinn University of Technology**. For contributions or queries, contact: **michael.anywar@alpamax.eu**
+> 🔓 **Open Source Release**: This project is available under the MIT License.  
+> 🧠 **Project Lead**: Maintained by **Michael Anywar** — Healthcare Technology Researcher at **Tallinn University of Technology**  
+> 📫 Contact: **michael.anywar@alpamax.eu**
 
 ---
+
 ## What does ALUR stand for?
 
 **ALUR** stands for:  
@@ -13,51 +15,81 @@
 > **Unified**  
 > **Routing**
 
-It reflects the tool’s purpose: to logically route clinical data retrieved via openEHR AQL into structured FHIR resources, supporting seamless and selective healthcare data exchange.
-
 ---
 
 ## Overview
 
-**ALUR** is a modular, query-driven engine for transforming openEHR data into FHIR-compliant resources. It enables secure, selective, and reusable extraction of clinical data from openEHR CDRs using AQL, mapping the results to FHIR using YAML. The engine is designed for both in realtime and scheduled data processing.
+**ALUR** is a modular, query-driven engine for transforming openEHR data into FHIR-compliant resources. It enables secure, selective, and reusable extraction of clinical data from openEHR CDRs using AQL, mapping the results to FHIR using YAML. Supports both real-time and scheduled processing.
 
-Supports:
-- Selective pseudonymization via GPAS or AES encryption  
-- Custom mappings 
+Highlights:
+- Selective pseudonymization (GPAS or AES)
+- YAML-based custom FHIR mappings
+- Consent provision nesting support
+- Secure, reproducible, and scalable
+
 ---
 
 ## Features
 
-- **openEHR AQL-based Integration** – Pull data using parameterized AQLs  
-- **FHIR Mapping Engine** – YAML + templates to output FHIR-compliant JSON  
-- **Pseudonymization Support** – AES encryption or external GPAS integration  
-- **Consent Provision Nesting** – Fully supports complex `provision` trees (`permit`, `deny`, etc.)  
-- **Extension Mapping** – Add custom `extension` fields with full value[x] support  
-- **Realtime and Scheduled processing**
----
+- **AQL-based integration** with openEHR CDRs  
+- **Jinja2 + YAML** driven FHIR resource mapping  
+- **GPAS / AES support** for pseudonymization  
+- **Provision-aware Consent transformation**  
+- **Rotating logs and interval-based scheduling**  
+- **Compatible with both Docker and Python dev environments**
 
 ---
 
-## 🔧 Installation
+## 🚀 Deployment Options
 
-### Prerequisites
-
-- Docker & Docker Compose  
-- Python 3.9+ for local execution
-- Postgres DB for temporary data persistance
-
-### Clone the Repository
+### Option 1: Run prebuilt image from Docker Hub
 
 ```bash
-git clone https://github.com/CzarMich/ALUR.git
-cd alur
+docker pull alpamaxeu/alur:latest
 ```
 
-### Configuration
-Edit the following files as needed:
-- `application/conf/settings.yml` – resource configuration and fetch interval  
-- `application/conf/environment/.env` – database credentials, AQL/FHIR endpoints  
-- `application/resources/*.yml` – AQL and FHIR mapping templates
+Create required folders on your host:
+
+```bash
+sudo mkdir -p /opt/alur/{data,logs,conf/environment/cert,conf/environment/key,resources}
+```
+
+Then launch using Docker Compose (see `docker-compose.yml`):
+
+```bash
+docker-compose up -d
+```
+
+### Option 2: Build from source
+
+```bash
+git clone https://github.com/alpamax/ALUR.git
+cd ALUR
+./run.sh
+```
+
+---
+
+## 🧑‍💻 Development (optional for contributors)
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+export $(cat application/conf/environment/.env | xargs)
+
+python application/main.py
+```
+
+---
+
+## 🔧 Configuration
+
+Edit the following files:
+
+- `application/conf/settings.yml` — fetch intervals, logic  
+- `application/conf/environment/.env` — DB + endpoint config  
+- `application/resources/*.yml` — FHIR mapping templates  
 
 Example `.env`:
 
@@ -72,75 +104,32 @@ FHIR_BASE_URL=http://your.fhir.server/fhir
 
 ---
 
-## ▶️ Usage
+## 🧪 Consent-Specific Logic
 
-### Docker Execution
-
-```bash
-docker-compose build
-docker-compose up
-```
-
-The service will:
-- Run AQL queries on schedule  
-- Apply optional pseudonymization  
-- Map results to FHIR JSON  
-- Push to FHIR server
-
-### Local Execution
-
-```bash
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-export $(cat application/conf/environment/.env | xargs)
-
-python application/main.py
-```
-
-To run tests or override the entry point:
-
-```bash
-python application/test.py
-```
-
----
-
-## ✨ Consent-Specific Logic
-
-Consent resource processing includes:
-- Grouping by `composition_id` (or custom `group_by`)
-- Searching existing FHIR Consent by `identifier`
-- Conditional POST or PUT based on presence
-- Full support for `provision` nesting
-
----
-
-## 🧪 Performance Testing
-
-```bash
-grep "✅ Final FHIR Consent" logs/alur.log
-```
+- Groups records by `composition_id` or configurable key  
+- Uses `identifier` to detect existing Consent  
+- Generates full `provision` nesting  
+- Uses `committed_dateTime` for `Consent.dateTime`
 
 ---
 
 ## 📋 Logging
 
-- Logs stored in `/logs/` folder  
-- Rotated daily, retained for 30 days (configurable)  
-- Verbosity controlled via `settings.yml`
+- Logs stored in `/opt/alur/logs/`  
+- Rotated daily, kept for 30 days  
+- Controlled via `settings.yml`
 
 ---
 
 ## 🔐 Security
 
-- **GPAS integration** with certificate-based SOAP for pseudonymization  
-- **AES encryption** for ID masking (auto-generated key stored under `conf/environment/key/key.bin`)  
+- **GPAS integration** via certificate-based SOAP  
+- **AES encryption** with auto key at `conf/environment/key/key.bin`  
 - **No PHI stored locally**
 
 ---
 
-## 🔄 Extension Mapping Examples
+## 🧩 Extension Mapping Examples
 
 ### 1. Under Root Resource
 
@@ -169,21 +158,36 @@ coding:
 
 ## ⚠️ Troubleshooting
 
-- 🔌 **Connection errors**: Check `.env` values  
-- 🔐 **Key errors**: Ensure container has access to `conf/environment/key/`  
-- 📤 **FHIR errors**: Validate YAML structure and required fields  
-- 🧩 **Consent issues**: Confirm `provision: "{{ provision }}"` is used properly  
-- 📎 **Extension problems**: Check `value[x]` consistency with FHIR spec
+- 🔌 Check `.env` if DB or endpoint fails  
+- 🔐 Ensure `key.bin` exists for AES  
+- 📤 Validate YAML mapping structure  
+- 🧩 Use correct `value[x]` in extensions  
+- 🧪 Confirm `provision: "{{ provision }}"` is in mappings
 
 ---
 
-## 📦 Requirements Management
+## 📦 Dependency Management
 
-To update dependencies:
+Update dependencies with:
 
 ```bash
 pip freeze > requirements.txt
 ```
+
+---
+
+## 🛠 Project Scripts
+
+- `run.sh` – prepare folders, run, wait for DB, tail logs  
+- `stop.sh` – gracefully shut down  
+- `Makefile` – shortcut: `make run`, `make stop`, `make logs`, etc.  
+
+---
+
+## 🐙 CI/CD
+
+- CI builds and pushes hardened image (stripped `.py`, compiled `.pyc`)  
+- See `.github/workflows/alur.yml` for details
 
 ---
 
@@ -203,4 +207,5 @@ Open issues, suggest improvements, or submit a pull request.
 ## 📬 Contact
 
 **Michael Anywar**  
-michael.anywar@alpamax.eu
+michael.anywar@alpamax.eu  
+https://www.alpamax.eu

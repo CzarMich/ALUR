@@ -11,10 +11,10 @@ services:
       - POLL_INTERVAL=1800
       - PYTHONUNBUFFERED=1
     volumes:
-      - ./logs:/app/logs
-      - ./data:/app/data
-      - ./application/conf/environment/.env:/app/application/conf/environment/.env
-      - ./application/conf/environment/cert:/app/application/conf/environment/cert
+      - /opt/alur/data:/app/data
+      - /opt/alur/logs:/app/logs
+      - /opt/alur/conf:/app/application/conf:ro
+      - /opt/alur/resources:/app/application/resources:ro
     depends_on:
       - db
     command: python application/main.py
