@@ -14,12 +14,12 @@ jobs:
     - name: ⬇️ Checkout repo
       uses: actions/checkout@v3
 
-    - name: 🐍 Set up Python
+    - name: 🐍 Set up Python 3.11
       uses: actions/setup-python@v4
       with:
         python-version: '3.11'
 
-    - name: 📦 Install dependencies
+    - name: 📦 Install Python dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
@@ -29,6 +29,7 @@ jobs:
         echo "No test suite yet. Define your tests under a /tests folder."
 
   docker:
+    name: 🐳 Build & Push Docker Image
     needs: build-and-test
     runs-on: ubuntu-latest
 
@@ -49,16 +50,19 @@ jobs:
       id: meta
       uses: docker/metadata-action@v5
       with:
-        images: anywarmichael/alur
+        images: alpamaxeu/alur
         tags: |
           type=sha
           type=ref,event=branch,enable=true,branch=main
           latest
 
-    - name: 🏗️ Build and push Docker image
+    - name: 🏗️ Build and push hardened Docker image
       uses: docker/build-push-action@v5
       with:
         context: .
+        file: ./Dockerfile
         push: true
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
+        build-args: |
+          PYTHONUNBUFFERED=1
