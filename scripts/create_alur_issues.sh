@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PROJECT_ID=YOUR_PROJECT_ID
+PROJECT_ID=PVT_kwDOB-C9_c4A4l2M
 
 echo "Creating prioritized ALUR issues and linking to GitHub Project..."
 
